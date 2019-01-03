@@ -4,8 +4,8 @@ import signin from './components/signin.vue'
 
 
 export default[
-    {path:"/",component:home},
+    {path:"/home",component:home},
     {path:"/luckdraw",component:luckdraw},
-    {path:"/signin",component:signin},
+    {path:"/",component:signin},
 
 ]
