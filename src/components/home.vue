@@ -30,13 +30,13 @@ footer{
     position: absolute;
     bottom: 0;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1020px) {
   #home {
-  width: 1024px;
+  width: 960px;
   margin: 0 auto;
 }
 header {
-  max-width: 1024px;
+  max-width: 960px;
   height: 80px;
   border: 1px solid rebeccapurple;
 }
