@@ -1,26 +1,11 @@
 <template>
-  <div id="home">
-    <header>
-      <img src="../assets/code.png" alt id="code">
-      <img src="../assets/logo.png" alt id="name">
-    </header>
-    <router-view></router-view>
-    
-    <footer>
-      <router-link to="/index" exact><input type='button' value="首页"></router-link>
-      <router-link to="/signin" exact><input type='button' value="签到墙"></router-link>
-      <router-link to="/luckdraw" exact><input type='button' value="抽奖"></router-link>
-      <router-link to="/sign" exact><input type='button' value="签到"></router-link>
-    </footer>
-  </div>
+    <center>
+      <h1>扫码签到</h1>
+      <img src='../assets/code.png' alt=''>
+      <router-link to="/signin" exact><input type='button' value='开始'></router-link>
+      <P>主办单位：武汉百胜睿迪软件有限公司</P>
+   </center>
 </template>
-
-<script>
-export default {
-  name: "home"
-};
-</script>
-
 <style scoped>
 #home {
   max-width: 1200px;
@@ -121,3 +106,5 @@ footer input:hover{
   }
 }
 </style>
+
+

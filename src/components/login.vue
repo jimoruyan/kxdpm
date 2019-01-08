@@ -53,7 +53,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 #login{
     width: 760px;
     margin: 0 auto;
