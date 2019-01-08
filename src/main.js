@@ -6,7 +6,7 @@ import VueRouter from 'vue-router'
 import Routes from './routes'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'https://wd8910585934yneopr.wilddogio.com'
+axios.defaults.baseURL = 'https://wd8508069713buenzz.wilddogio.com/'
 Vue.use(VueRouter)
 
 Vue.config.productionTip = false

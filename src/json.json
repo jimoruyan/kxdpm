@@ -1,0 +1,24 @@
+{
+    "userList":[{
+        "id":0,
+        "name":"王成勇",
+        "phonenumber":18186424859,
+        "img_src":"../assets/me.png"
+    },{
+        "id":1,
+        "name":"赵依",
+        "phonenumber":18186424859,
+        "img_src":"../assets/1.png"
+    },{
+        "id":2,
+        "name":"孙洋",
+        "phonenumber":18186424859,
+        "img_src":"../assets/2.png"
+    },{
+        "id":3,
+        "name":"王浩",
+        "phonenumber":18186424859,
+        "img_src":"../assets/3.png"
+    }
+]
+}
