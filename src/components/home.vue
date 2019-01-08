@@ -3,7 +3,7 @@
   <header></header>
   <router-view></router-view>
   <footer>
-    <router-link to="/" exact>签到墙</router-link>
+    <router-link to="/signin" exact>签到墙</router-link>
     <router-link to="/luckdraw" exact>抽奖</router-link>
   </footer>
 </div>

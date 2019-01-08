@@ -108,7 +108,7 @@
 
 <script>
 import axios from "../axios-auth";
-
+import qs from "qs";
 export default {
   name: "luckdraw",
   data() {
@@ -130,6 +130,13 @@ export default {
       ],
       selecteds:"",
       userList:"",
+      param:{
+        phone:"18186424859",
+        // user_name:"test",
+        // password:"17dc93eeb4c83c8eba331bb47ac03920",
+        vcode:"310127",
+      },
+      // phone:18186424859
     };
   },
   created() {
@@ -145,11 +152,14 @@ export default {
       // }).then( data => {
       //   console.log(data)
       // });
-      axios.post("/pc_api/offline_activities/login").then(function(data) {
-      return data.data
-      }).then( data => {
-        console.log(data)
-      });
+      // axios.post("/pc_api/offline_activities/login",qs.stringify(this.param)).then(function(data) {
+      // axios.post("/pc_api/offline_activities/sign_in",qs.stringify(this.param)).then(function(data) {
+      // axios.get("/pc_api/offline_activities/sign_in").then(function(data) {
+
+      // return data.data
+      // }).then( data => {
+      //   console.log(data)
+      // });
   },
   mounted() {
     let oUl = this.$refs.oUl;
@@ -579,6 +589,8 @@ export default {
     font-size: 20px;
     line-height: 26px;
     padding: 5px 4px;
+    background-size: 100%;
+
   }
   #luckdraw .right .title .icon-title {
     margin-left: 10px;
@@ -606,7 +618,7 @@ export default {
   }
 
   #luckdraw .right .level:after {
-    height: 56;
+    height: 56px;
     background-image: url(../assets/border-b2.png);
   }
   #luckdraw .result label {
