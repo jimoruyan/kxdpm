@@ -39,7 +39,7 @@ export default {
 			timer:null,
 			msg:"获取验证码",
 			phonenum:{
-				phone:'',
+				phone:'18186424859',
 				vcode:''
 			},
 			
@@ -52,10 +52,8 @@ export default {
 				this.ishow=true
 				var tip=document.getElementById('error_box')
 				let phonenum=this.phonenum
-				let url='http://www.zdsapi.com/pc_api/offline_activities/verification_code'
-				console.log('url',url);
-				axios.post(url,qs.stringify(this.phonenum)).then(function(response){
-					console.log("请求成功",response.data.message)
+				axios.post("/pc_api/offline_activities/sign_in",qs.stringify(this.phonenum)).then(function(response){
+					console.log("请求成功",response.data)
 					tip.innerHTML=response.data.message
 				},function(error){
 					console.log("请求失败",error);
