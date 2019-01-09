@@ -84,10 +84,9 @@ export default {
       liWidth: null,
       liNum: null,
       options: [
-        { value: 0, text: "一等奖" },
-        { value: 1, text: "二等奖" },
-        { value: 2, text: "三等奖" },
-        { value: 3, text: "参与奖" }
+        { value: 0, text: "特等奖" },
+        { value: 1, text: "一等奖" },
+        { value: 2, text: "二等奖" }
       ],
       selecteds: "",
       userList: "",
