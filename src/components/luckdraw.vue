@@ -13,22 +13,6 @@
               <img src="../assets/me.jpg">
               <span>{{list.name}}</span>
             </li>
-            <!-- <li class="oLi">
-              <img src="../assets/me.jpg" />
-              <span>1</span>
-            </li>
-            <li class="oLi">
-              <img src="../assets/1.jpg" />
-              <span>2</span>
-            </li>
-            <li class="oLi">
-              <img src="../assets/2.jpg" />
-              <span>3</span>
-            </li>
-            <li class="oLi">
-              <img src="../assets/3.jpg" />
-              <span>4</span>
-            </li>-->
           </ul>
         </div>
       </div>
@@ -61,48 +45,17 @@
         <i class="icon icon-more"></i>
       </div>
       <div id="luckUl" class="result">
-        <div id="level_18795" class="level">
+        <div  class="level" v-for="(list,index) in lucked" :key="index">
           <label>
-            一等奖：
-            <a>1</a>
+            {{list.award_name}}
+            <a></a>
           </label>
           <ul class="luckUl">
-            <li v-for="(list,index) in lucked" :key="index">
-              <img src="../assets/me.jpg" alt="">
-              <span>{{list[0].users.user_name}}</span>
+            <li v-for="(lists,index) in lucked[index].users" :key="index">
+              <img src="../assets/me.jpg" alt>
+              <span>{{lists.user_name}}</span>
             </li>
           </ul>
-        </div>
-        <div id="level_18795" class="level">
-          <label>
-            二等奖：
-            <a>2</a>
-          </label>
-          <ul class="luckUl">
-            <li v-for="(list,index) in lucked" :key="index">
-              <img src="../assets/me.jpg" alt="">
-              <span>{{list[1].users.user_name}}</span>
-            </li>
-          </ul>
-        </div>
-        <div id="level_18795" class="level">
-          <label>
-            三等奖：
-            <a>3</a>
-          </label>
-          <ul class="luckUl">
-            <li v-for="(list,index) in lucked" :key="index">
-              <img src="../assets/me.jpg" alt="">
-              <span>{{list[2].users.user_name}}</span>
-            </li>
-          </ul>
-        </div>
-        <div id="level_18795" class="level">
-          <label>
-            参与奖：
-            <a>5</a>
-          </label>
-          <ul class="luckUl"></ul>
         </div>
       </div>
 
@@ -138,43 +91,41 @@ export default {
       ],
       selecteds: "",
       userList: "",
-      signed: [],  //签到名单
-      luck:{       //上传中奖名单
-        award_id:"3",
-        user_ids:"3,4,5"
+      signed: [], //签到名单
+      luck: {
+        //上传中奖名单
+        award_id: "3",
+        user_ids: "3,4,5"
       },
-      lucked:"",  //获取中奖名单    
+      lucked: "" //获取中奖名单
     };
   },
   created() {
+    // let _this = this;
     this.selecteds = this.options[0].value;
-    // axios.post("/pc_api/offline_activities/login",qs.stringify(this.param)).then(function(data) {
-    // axios.post("/pc_api/offline_activities/sign_in",qs.stringify(this.param)).then(function(data) {
-    this.axios
+    this.axios    //获取签单名单
       .get("/pc_api/offline_activities/sign_in")
-      .then(function(data) {
-        // console.log(data)
+      .then( data=> {
         return data.data.data;
       })
       .then(data => {
-        this.signed = data;
-        // console.log(this.signed);
+        this.signed = data.users;
+        this.liNum = this.signed.length;
       });
-      this.axios
-      // .post("/pc_api/offline_activities/lottery",this.luck)
+      this.axios    //获取中奖名单
       .get("/pc_api/offline_activities/lottery")
-      .then(function(data) {
+      .then(data => {
         return data.data.data;
       })
       .then(data => {
         this.lucked = data;
-        console.log(this.lucked[0].users[0].user_name)
+        console.log(this.lucked);
       });
+    
   },
   mounted() {
     let oUl = this.$refs.oUl;
-    this.liNum = document.getElementsByClassName("oLi").length;
-    // console.log(this.liNum)
+    
     if (window.innerWidth <= 1024) {
       //根据窗口宽度调整头像宽度
       this.liWidth = 140;
@@ -214,25 +165,23 @@ export default {
       console.log(oUl.offsetLeft);
       clearInterval(this.beginTimer);
       if (oUl.offsetLeft > 0) {
-        //取整
         oUl.style.left = liWidth + "px";
       } else if (oUl.offsetLeft <= -liWidth * (liNum - 1)) {
         oUl.style.left = oUl.offsetLeft + liWidth - distance + "px";
       } else {
         oUl.style.left = oUl.offsetLeft - distance + "px";
       }
-      // console.log(oUl.offsetLeft)
       let _num = -oUl.offsetLeft / liWidth; //获取中奖人
       let luckLi = oLi[_num + 1].cloneNode(true);
       luckUl[selected].appendChild(luckLi);
       this.luckState = true;
     },
-    again: function() {
-      let luckUl = document.getElementsByClassName("luckUl");
-      luckUl.removeChild();
-    }
-    // getCouponSelected:function(){
-    //   console.log(this.selecteds)
+    // again: function() {
+    //   this.axios    //删除中奖名单
+    //   .delete("/pc_api/offline_activities/lottery")
+    //   .then(data => {
+    //     console.log(data)
+    //   });
     // }
   }
 };

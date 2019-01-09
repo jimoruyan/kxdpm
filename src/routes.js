@@ -4,6 +4,7 @@ import signin from './components/signin.vue'
 import login from './components/login.vue'
 import sign from './components/sign.vue'
 import index from './components/index.vue'
+import lucked from './components/lucked.vue'
 
 
 
@@ -24,6 +25,7 @@ export default[
           component: signin
         },
         {path:"/index",component:index},
+        {path:"/lucked",component:lucked},
       ]},
     {path:"/login",component:login},
     {path:"/sign",component:sign},
