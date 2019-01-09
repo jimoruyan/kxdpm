@@ -10,48 +10,17 @@
         <i class="icon icon-more"></i>
       </div>
       <div id="luckUl" class="result">
-        <div id="level_18795" class="level">
+        <div  class="level" v-for="(list,index) in lucked" :key="index">
           <label>
-            一等奖：
-            <a>1</a>
+            {{list.award_name}}
+            <a></a>
           </label>
           <ul class="luckUl">
-            <li v-for="(list,index) in lucked[0].users" :key="index">
-              <img src="../assets/me.jpg" alt="">
-              <span>{{list.user_name}}</span>
+            <li v-for="(lists,index) in lucked[index].users" :key="index">
+              <img src="../assets/me.jpg" alt>
+              <span>{{lists.user_name}}</span>
             </li>
           </ul>
-        </div>
-        <div id="level_18795" class="level">
-          <label>
-            二等奖：
-            <a>2</a>
-          </label>
-          <ul class="luckUl">
-            <li v-for="(list,index) in lucked[1].users" :key="index">
-              <img src="../assets/me.jpg" alt="">
-              <span>{{list.user_name}}</span>
-            </li>
-          </ul>
-        </div>
-        <div id="level_18795" class="level">
-          <label>
-            三等奖：
-            <a>3</a>
-          </label>
-          <ul class="luckUl">
-            <li v-for="(list,index) in lucked[2].users" :key="index">
-              <img src="../assets/me.jpg" alt="">
-              <span>{{list.user_name}}</span>
-            </li>
-          </ul>
-        </div>
-        <div id="level_18795" class="level">
-          <label>
-            参与奖：
-            <a>5</a>
-          </label>
-          <ul class="luckUl"></ul>
         </div>
       </div>
     </div>
@@ -86,22 +55,18 @@ export default {
     this.axios
       .get("/pc_api/offline_activities/sign_in")
       .then(function(data) {
-        // console.log(data)
         return data.data.data;
       })
       .then(data => {
         this.signed = data;
-        // console.log(this.signed);
       });
       this.axios
-      // .post("/pc_api/offline_activities/lottery",this.luck)
       .get("/pc_api/offline_activities/lottery")
       .then(function(data) {
         return data.data.data;
       })
       .then(data => {
         this.lucked = data;
-        console.log(this.lucked[0].users[0].user_name)
       });
   },
 };
@@ -109,7 +74,6 @@ export default {
 
 <style scoped>
 #luckdraw {
-  /* display: flex; */
   position: absolute;
   max-width: 1200px;
   top: 140px;

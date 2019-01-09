@@ -60,7 +60,7 @@
       </div>
 
       <div class="btn-box">
-        <a class="btn reclick" @click="again">重新抽奖</a>
+        <a class="btn reclick">重新抽奖</a>
         <a class="btn submitUser" id="submitLottery">确认名单</a>
       </div>
     </div>
