@@ -1,8 +1,8 @@
 <template>
   <div id="home">
     <header>
-      <img src="../assets/code.png" alt id="code">
-      <img src="../assets/logo.png" alt id="name">
+      <img src="../assets/code.png" id="code">
+      <img src="../assets/logo.png" id="name">
     </header>
     <router-view></router-view>
     
@@ -47,42 +47,7 @@ header {
   top: 45px;
   
 }
-center h1{
-  font-size: 50px;
-  line-height: 50px;
-  color:white;
-  margin: 10px;
-}
-center{
-  max-width: 1200px;
-  text-align: center;
-  padding-bottom: 10px;
-}
-center img{
-  display:inline-block;
-  height: 500px;
-  width: 500px;
 
-}
-center input{
-  display: block;
-  margin: 30px auto;
-  border: 0px;
-  height: 60px;
-  width: 120px;
-  border-radius: 5px;
-  background-color: orangered;
-  color: white;
-  font-size: 25px;
-  cursor: pointer;
-}
-center a{
-  text-decoration: none;
-}
-p{
-  font-size: 30px;
-  color: white;
-}
 footer{
     font-size: 20px;
     position: absolute;
@@ -104,20 +69,41 @@ footer input:hover{
   background-color: #00BFFF;
   color:white;
 }
-@media screen and (max-width: 1020px) {
+@media screen and (max-width: 1024px) {
   #home {
     width: 960px;
     margin: 0 auto;
   }
   header {
     max-width: 960px;
-    height: 80px;
-    border: 1px solid rebeccapurple;
+    height: 90px;
   }
+  #code{
+  width: 90px;
+  height: 90px;
+  display: inline-block;
+}
+  #name{
+  width: 200px;
+  display: inline-block;
+  position: absolute;
+  right: 30px;
+  top: 20px;
+  }
+
   footer {
     font-size: 20px;
     position: absolute;
-    bottom: 0;
+    bottom: 5px;
   }
+  footer input{
+  height: 30px;
+  width: 80px;
+  background-color: grey;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+
+}
 }
 </style>

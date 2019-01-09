@@ -1,6 +1,6 @@
 <template>
   <div id="sign">
-<div class="box">
+	<div class="box">
 	<h2>签到</h2>
     
 		<form method='post' action=''>
@@ -35,7 +35,7 @@ export default {
 		return{
 			data:[],
 			disable:false,
-			time:10,
+			time:60,
 			timer:null,
 			msg:"获取验证码",
 			phonenum:{
@@ -61,7 +61,7 @@ export default {
 				})
 					if(!this.timer){
 						this.timer=setInterval(()=>{
-							if(this.time>0&&this.time<=10){
+							if(this.time>0&&this.time<=60){
 								this.time--;
 								if(this.time!==0){
 									this.msg="重新发送("+this.time+")";
@@ -69,7 +69,7 @@ export default {
 								}
 							}else{clearInterval(this.timer);
 							this.msg='获取验证码';
-							this.time=10;
+							this.time=60;
 							this.timer=null;
 							this.disable=false;
 							
@@ -104,6 +104,12 @@ export default {
 	padding:0;
 	font-family:"微软雅黑";
 	font-size:12px;
+}
+#sign{
+	width: 100%;
+	height: 100%;
+	background-image: url('../assets/qdbg.png');
+	background-size: cover;
 }
 .img{
   position: absolute;

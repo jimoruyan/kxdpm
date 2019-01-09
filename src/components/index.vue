@@ -89,21 +89,47 @@ footer input:hover{
   background-color: #00BFFF;
   color:white;
 }
-@media screen and (max-width: 1020px) {
+@media screen and (max-width: 1024px) {
   #home {
     width: 960px;
     margin: 0 auto;
   }
-  header {
-    max-width: 960px;
-    height: 80px;
-    border: 1px solid rebeccapurple;
-  }
-  footer {
-    font-size: 20px;
-    position: absolute;
-    bottom: 0;
-  }
+  center h1{
+  font-size: 30px;
+  line-height: 30px;
+  color:white;
+  margin: 10px;
+}
+center{
+  max-width: 1024px;
+  text-align: center;
+  padding-bottom: 10px;
+}
+center img{
+  display:inline-block;
+  height: 330px;
+  width: 330px;
+
+}
+center input{
+  display: block;
+  margin: 15px auto;
+  border: 0px;
+  height: 40px;
+  width: 100px;
+  border-radius: 5px;
+  background-color: orangered;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+center a{
+  text-decoration: none;
+}
+p{
+  font-size: 25px;
+  color: white;
+}
 }
 </style>
 
