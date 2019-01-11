@@ -89,7 +89,7 @@ footer input:hover{
   display: inline-block;
   position: absolute;
   right: 30px;
-  top: 20px;
+  top: 30px;
   }
 
   footer {

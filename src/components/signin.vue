@@ -1,7 +1,7 @@
 <template>
   <div id="sign">
    <ul>
-      <li v-for='(item,index) in imgs' :key='item.id'><img v-bind:src='item.img'>{{item.name}}</li>
+      <li v-for='(item,index) in imgs' :key='item.id'><img v-bind:src='item.img'></li>
       <button id='ceshi' @click='num()' >测试</button>
       <transition name='fade'> 
         <div id='tip' v-show='ishow'>
@@ -23,7 +23,7 @@ export default {
     return{
       ishow:'',
       number:'',
-      imgs:[],
+      imgs:[{name:'4',img:require('../assets/胡超15827509535.jpg')},{name:'4',img:require('../assets/胡超15827509535.jpg')},{name:'4',img:require('../assets/胡超15827509535.jpg')},{name:'10',img:require('../assets/胡超15827509535.jpg')}],
       last:[],
       send:{
         order:'sign_in_time',
@@ -33,15 +33,26 @@ export default {
     }
   },
   created(){
-    
-    setInterval(()=>{setTimeout(()=>{
-          let send=this.send
+     let send=this.send
           let url='https://dev.ishop.baison.net/frontend/pc_api/offline_activities/sign_in'
               console.log('url',url);
               axios.get(url,{params:{order:'sign_in_time'}}).then((response)=>{
               console.log("请求成功",response.data.data.users)
               this.imgs=response.data.data.users
-            
+              console.log(this.imgs)
+              },function(error){
+              console.log("请求失败",error);
+                })
+                
+    setInterval(()=>{setTimeout(()=>{
+          
+          let send=this.send
+          let url='https://dev.ishop.baison.net/frontend/pc_api/offline_activities/sign_in'
+              console.log('url',url);
+              axios.get(url,{params:{order:'sign_in_time'}}).then((response)=>{
+              console.log("请求成功",response.data.data.users)
+              var newitem=response.data.data.users
+              this,imgs.pish(newitem)
               console.log(this.imgs)
               },function(error){
               console.log("请求失败",error);
@@ -51,7 +62,11 @@ export default {
         
 
     },5000)
-          
+      
+      // setInterval(()=>{
+      // var newitem={name:'4',img:require('../assets/胡超15827509535.jpg')};
+      // this.imgs.push(newitem);
+      //     },5000)
   },
   methods:{
     num(){
@@ -61,21 +76,25 @@ export default {
   },
  watch:{
    
-   imgs:function(){
-    
-     var last=this.imgs[this.imgs.length-1]
+   imgs:{
+    handler:function(newVal){
+    var last=this.imgs[this.imgs.length-1]
      this.last=last
      console.log(last)
       // var newitem={name:'4',img:require('../assets/胡超15827509535.jpg')};
       // this.imgs.push(newitem);
       var li=document.getElementsByTagName('li');
       var length=li.length;
-      this.number=length;
+      this.number=length+1;
       console.log(length);
       this.ishow=!this.ishow;
       setTimeout(()=>{
        this.ishow=!this.ishow
           },2000)
+          console.log(newVal)
+    },
+    deep:true
+   
       
     }
   }
@@ -146,25 +165,27 @@ export default {
 #sign {
   max-width: 1200px;
   margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 6px;
 }
 ul{
-  height: 798px;
+  
+  height: 770px;
   overflow: hidden;
   
 }
 li{
  
   list-style: none;
-  height: 96px;
-  width: 64px;
-  margin-right: 5px;
-  margin-bottom: 5px;
+  height: 90px;
+  width: 60px;
+  margin: 3px;
   background-color:rgba(0, 0, 0, 0.8  );
   display: inline-block;
 }
 li img{
-  height: 96px;
-  width: 64px;
+  height: 90px;
+  width: 60px;
 }
 
 
@@ -172,25 +193,27 @@ li img{
 #sign {
   max-width: 960px;
   margin: 0px auto;
+  padding: 7px;
+  
 }
 
 ul{
-  height: 450px;
+  height: 460px;
   overflow: hidden;
+  
   
 }
 li{
   list-style: none;
-  height: 60px;
-  width: 40px;
-  margin-right: 5px;
-  margin-bottom: 5px;
+  height: 61.5px;
+  width: 41px;
+  margin: 2px;
   background-color:rgba(0, 0, 0, 0.8  );
   display: inline-block;
 }
 li img{
-  height: 60px;
-  width: 40px;
+  height: 61.5px;
+  width: 41px;
 }
 #tip{
   position: absolute;

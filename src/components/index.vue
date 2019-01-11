@@ -36,18 +36,20 @@ center h1{
   font-size: 50px;
   line-height: 50px;
   color:white;
-  margin: 10px;
+  margin-bottom: 10px;
 }
 center{
   max-width: 1200px;
   text-align: center;
   padding-bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px
 }
 center img{
   display:inline-block;
   height: 500px;
   width: 500px;
-
+  
 }
 center input{
   display: block;
@@ -98,12 +100,14 @@ footer input:hover{
   font-size: 30px;
   line-height: 30px;
   color:white;
-  margin: 10px;
+  margin-bottom: 6px;
 }
 center{
   max-width: 1024px;
   text-align: center;
   padding-bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px;
 }
 center img{
   display:inline-block;
