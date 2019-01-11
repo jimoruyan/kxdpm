@@ -83,7 +83,7 @@ footer input:hover{
   width: 90px;
   height: 90px;
   display: inline-block;
-}
+  }
   #name{
   width: 200px;
   display: inline-block;

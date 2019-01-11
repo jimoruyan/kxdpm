@@ -1,13 +1,13 @@
 <template>
   <div id="sign">
    <ul>
-      <li v-for='(item,index) in imgs'><img v-bind:src='item.img'></li>
-      <button @click='num()' >测试</button>
+      <li v-for='(item,index) in imgs' :key='item.id'><img v-bind:src='item.img'>{{item.name}}</li>
+      <button id='ceshi' @click='num()' >测试</button>
       <transition name='fade'> 
         <div id='tip' v-show='ishow'>
-        <div id='imgg'><img src='../assets/3.jpg'><h6>leisiming</h6></div>
+        <div id='imgg'><img :src='last.img'><h6>{{last.name}}</h6></div>
         
-        <div id='text'>签到成功</div>
+        <div id='text'>签到成功{{number}}</div>
       </div>
         </transition>
    </ul>
@@ -15,47 +15,68 @@
 </template>
 
 <script>
-
+import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'sign',
   data(){
     return{
       ishow:'',
-      imgg:'',
       number:'',
-      imgs:[
-        {name:'1',img:require('../assets/1.jpg')},
-        {name:'2',img:require('../assets/2.jpg')},
-        {name:'3',img:require('../assets/3.jpg')},
-        {name:'4',img:require('../assets/4.jpg')},
-        {name:'5',img:require('../assets/5.jpg')},
-        {name:'6',img:require('../assets/6.jpg')},
-        {name:'7',img:require('../assets/7.jpg')},
-        {name:'8',img:require('../assets/8.jpg')},
-        {name:'9',img:require('../assets/9.jpg')},
-        {name:'10',img:require('../assets/10.jpg')},
-        {name:'11',img:require('../assets/11.jpg')},
-        {name:'12',img:require('../assets/12.jpg')},
-        {name:'13',img:require('../assets/13.jpg')},
-        {name:'14',img:require('../assets/14.jpg')},
-      
-      ]
+      imgs:[],
+      last:[],
+      send:{
+        order:'sign_in_time',
+       
+        
+      }
     }
   },
+  created(){
+    
+    setInterval(()=>{setTimeout(()=>{
+          let send=this.send
+          let url='https://dev.ishop.baison.net/frontend/pc_api/offline_activities/sign_in'
+              console.log('url',url);
+              axios.get(url,{params:{order:'sign_in_time'}}).then((response)=>{
+              console.log("请求成功",response.data.data.users)
+              this.imgs=response.data.data.users
+            
+              console.log(this.imgs)
+              },function(error){
+              console.log("请求失败",error);
+                })
+
+    },0)
+        
+
+    },5000)
+          
+  },
   methods:{
-   num(){
-      var newitem={name:'15',img:require('../assets/1.jpg')};
+    num(){
+      var newitem={name:'4',img:require('../assets/胡超15827509535.jpg')};
       this.imgs.push(newitem);
+    }
+  },
+ watch:{
+   
+   imgs:function(){
+    
+     var last=this.imgs[this.imgs.length-1]
+     this.last=last
+     console.log(last)
+      // var newitem={name:'4',img:require('../assets/胡超15827509535.jpg')};
+      // this.imgs.push(newitem);
       var li=document.getElementsByTagName('li');
-      var length=li.length+1;
+      var length=li.length;
       this.number=length;
       console.log(length);
       this.ishow=!this.ishow;
       setTimeout(()=>{
        this.ishow=!this.ishow
-      
-     
           },2000)
+      
     }
   }
 }
@@ -68,6 +89,11 @@ export default {
 .fade-enter,.fade-leave-to{
  opacity: 0;
   
+}
+#ceshi {
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
 }
 #tip{
   position: absolute;
@@ -85,6 +111,7 @@ export default {
   border-radius: 10px;
   background-color: white;
   position: relative;
+  overflow: hidden;
 }
 #imgg h6{
   font-size: 15px;
@@ -148,22 +175,22 @@ li img{
 }
 
 ul{
-  height: 480px;
+  height: 450px;
   overflow: hidden;
   
 }
 li{
   list-style: none;
-  height: 75px;
-  width: 50px;
+  height: 60px;
+  width: 40px;
   margin-right: 5px;
   margin-bottom: 5px;
   background-color:rgba(0, 0, 0, 0.8  );
   display: inline-block;
 }
 li img{
-  height: 75px;
-  width: 50px;
+  height: 60px;
+  width: 40px;
 }
 #tip{
   position: absolute;
