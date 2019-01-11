@@ -11,6 +11,7 @@
       <router-link to="/signin" exact><input type='button' value="签到墙"></router-link>
       <router-link to="/luckdraw" exact><input type='button' value="抽奖"></router-link>
       <router-link to="/sign" exact><input type='button' value="签到"></router-link>
+      <router-link to="/lucked" exact><input type='button' value="获奖名单"></router-link>
     </footer>
   </div>
 </template>
