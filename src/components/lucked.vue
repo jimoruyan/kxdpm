@@ -5,7 +5,7 @@
         <i class="icon icon-title"></i>中奖名单
         <div class="resultNum">
           获奖人数:
-          <span id="luckNumber">54</span>
+          <span id="luckNumber">25</span>
         </div>
         <i class="icon icon-more"></i>
       </div>
@@ -74,13 +74,13 @@ export default {
 
 <style scoped>
 #luckdraw {
-  position: absolute;
+  position:sticky;
   max-width: 1200px;
-  top: 140px;
-  margin: 0 auto;
+  margin: 60px auto;
   box-sizing: border-box;
   box-shadow: 0 0 8px hsla(0, 0%, 100%, 0.5);
   padding: 10px;
+  background: rgba(0,0,0,.5);
 }
 #luckdraw .luck_user ul {
   position: relative;
@@ -105,6 +105,7 @@ export default {
   position: relative;
   font-size: 24px;
   color: white;
+  margin: 0 auto;
   width: 960px;
   display: inline-block;
 }
@@ -142,7 +143,7 @@ export default {
   cursor: pointer;
 }
 #luckdraw .right .result {
-  height: 300px;
+  height: 500px;
   overflow: auto;
 }
 #luckdraw .right .level {
@@ -214,5 +215,14 @@ export default {
   border-radius: 100%;
   margin: auto;
   margin-bottom: 10px;
+}
+@media screen and (max-width: 1024px) {
+  #luckdraw .right .result {
+    height: 350px;
+  margin-bottom: 0;
+}
+#luckdraw {
+  margin: 5px auto;
+}
 }
 </style>

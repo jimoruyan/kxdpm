@@ -94,8 +94,7 @@ footer input:hover{
 
   footer {
     font-size: 20px;
-    position: absolute;
-    bottom: 5px;
+    bottom: 0;
   }
   footer input{
   height: 30px;

@@ -1,5 +1,15 @@
 
-# API 文档
+# 目录
+
+- [获取短信验证码](#获取短信验证码)  
+- [签到](#签到)
+- [获取签到名单](#获取签到名单)  
+- [获取奖项信息](#获取奖项信息)  
+- [获取中奖用户](#获取中奖用户)  
+- [上传抽奖结果](#上传抽奖结果)  
+- [Admin登录](#Admin登录)  
+
+---------------------
 
 ## 获取短信验证码
 
@@ -90,15 +100,10 @@
 > |:--:|:--:|:--:|:--|
 > |start_time |0           |int   |开始时间 |
 > |end_time   |系统当前时间 |int   |结束时间 |
-> |page       |1           |int   |页数 |
-> |page_size  |10          |int   |结束时间 |
+> |page       |1           |int   |页数    |
+> |page_size  |200         |int   |分页大小 |
+> |order      |id          |str  |排序方式，有效参数['sign_in_time', 'id', 'name']
 
-#### 返回字段
-
-> |返回字段|字段类型|说明|
-> |:--:|:--:|:--|
-> |token              |str  |令牌          |
-> |token_expire_time  |int  |令牌过期      |
 
 #### 接口示例
 
@@ -108,7 +113,7 @@
     "message":"ok",
     "data":{
         "page":1,
-        "page_size":10,
+        "page_size":200,
         "count":2,
         "users":[
             {"id":1,"name":"t001","img":"hasdjas.jpg","sign_in_time":0},
@@ -172,11 +177,11 @@ GET
 
 #### URL
 
-/pc_api/offline_activities/lottery
+> /pc_api/offline_activities/lottery
 
 #### HTTP请求方式
 
-GET
+> GET
 
 #### 请求参数
 
@@ -192,36 +197,82 @@ GET
 
 ```json
 {
-  "status": 1,
-  "message": "保存成功",
-  "data": [
-    {
-      "award_id": 1,
-      "award_name": "特等奖",
-      "detail": "xxx 7日旅游（机票+住宿）",
-      "award_img": "",
-      "users": [
-        {"user_id": 1, "user_name": "t001", "img": "hasdjas.jpg" },
-        {"user_id": 2, "user_name": "t002", "img": "dff.ggg" }
-      ]
-    },
-    {
-      "award_id": 2,
-      "award_name": "一等奖",
-      "detail": "xxx 笔记本电脑",
-      "award_img": "",
-      "users": [
-        {"user_id": 2, "user_name": "t002", "img": "dff.ggg" }
-      ]
-    },
-    {
-      "award_id": 3,
-      "award_name": "二等奖",
-      "detail": "xxx 手机",
-      "award_img": "",
-      "users": []
-    }
-  ]
+    "status": 1,
+    "message": "ok",
+    "data": [
+        {
+            "award_id": 1,
+            "award_name": "特等奖",
+            "detail": "xxx 7日旅游（机票+住宿）",
+            "award_img": "",
+            "users": [
+                {
+                    "lottery_id": 34,
+                    "user_id": 1,
+                    "user_name": "test_wcy",
+                    "img": ""
+                }
+            ]
+        },
+        {
+            "award_id": 2,
+            "award_name": "一等奖",
+            "detail": "xxx 笔记本电脑",
+            "award_img": "",
+            "users": [
+                {
+                    "lottery_id": 36,
+                    "user_id": 2,
+                    "user_name": "test_lsm",
+                    "img": ""
+                },
+                {
+                    "lottery_id": 35,
+                    "user_id": 1,
+                    "user_name": "test_wcy",
+                    "img": ""
+                }
+            ]
+        }
+    ]
+}
+```
+
+---------------------
+
+## 删除中奖用户
+
+#### 接口功能
+
+> 删除指定的中奖数据
+
+#### URL
+
+> /pc_api/offline_activities/lottery
+
+#### HTTP请求方式
+
+> DELETE
+
+#### 请求参数
+
+> |参数|必选or默认|类型|说明|
+> |:--:|:--:|:--:|:--|
+> |lottery_id |必填 |str |中奖ID，多个的话以英文逗号分隔，要保证所有ID有效才能删除 |
+
+#### 返回字段
+
+> null
+
+#### 接口示例
+
+> 参数：lottery_id=45,46
+
+```json
+{
+    "status": -1,
+    "message": "删除失败，存在无效的 lottery_id",
+    "data": ""
 }
 ```
 
@@ -243,10 +294,11 @@ GET
 
 #### 请求参数
 
-> |参数|必选|类型|说明|
+> |参数|必选or默认值|类型|说明|
 > |:--:|:--:|:--:|:--|
-> |award_id |ture    |int   |奖项 ID                         |
-> |user_ids |true    |str   |获奖用户ID，多个ID以英文逗号分隔|
+> |award_id |必选    |int   |奖项 ID                         |
+> |user_ids |必选   |str   |获奖用户ID，多个ID以英文逗号分隔|
+> |duplicate|false | str| 是否允许重复中奖（true：允许，其他值：不允许）
 
 #### 返回字段
 
@@ -262,7 +314,7 @@ GET
 
 ---------------------
 
-* ## Admin 登录
+## Admin 登录
 
 #### 接口功能
 
