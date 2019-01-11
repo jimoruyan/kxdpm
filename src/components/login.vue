@@ -1,6 +1,7 @@
 <template>
   <div id="login">
     <div class="login">
+      <div><img src="../assets/logo.png" id="name"></div>
       <input type="text" v-model="param.user_name">
       <br>
       <input type="text" v-model="param.password">
@@ -20,7 +21,9 @@ export default {
     return {
       param: {
         user_name: "test",
-        password: "17dc93eeb4c83c8eba331bb47ac03920"
+        password: "17dc93eeb4c83c8eba331bb47ac03920",
+        // password: "888888"
+
       },
       userToken: ""
     };
@@ -39,6 +42,7 @@ export default {
           .post("/pc_api/offline_activities/login", qs.stringify(this.param))
           .then(res => {
             if ((res.data.status == -1)) {
+              console.log(res)
               alert("账号或密码错误");
               _this.$router.push("/login");
             } else {
@@ -62,10 +66,12 @@ export default {
 </script>
 <style scoped>
 #login {
-  width: 760px;
+  width: 500px;
   margin: 0 auto;
   position: relative;
-  top: 300px;
+  top: 200px;
+  background: rgba(0,0,0,.5);
+
 }
 #login .login {
   text-align: center;
@@ -75,6 +81,7 @@ export default {
   width: 220px;
   height: 30px;
   margin-top: 20px;
+  border-radius: 3px;
 }
 #login button {
   width: 180px;
@@ -82,7 +89,13 @@ export default {
   margin-top: 50px;
   margin-bottom: 20px;
   font-size: 20px;
+  color: white;
+  border: none;
   background-color: red;
+}
+#login .login img{
+  padding: 10px;
+  margin-top: 20px;
 }
 </style>
 
