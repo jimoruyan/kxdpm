@@ -7,7 +7,7 @@
       <transition name='fade'> 
         <div id='tip' v-show='ishow'>
         <div id='imgg'><img :src="'http://www.zdsapi.com'+last.img"><h6>{{last.name}}</h6></div>
-        <div id='text'>签到成功{{number}}</div>
+        <div id='text'>签到成功</div>
       </div>
         </transition>
    </ul>
