@@ -43,7 +43,6 @@ router.beforeEach((to, from, next) => {
     if (token === 'null' || token === '' || token === null) {
       // next();
       next('/login');
-
     } else {
       next();
     }

@@ -18,8 +18,15 @@
 </template>
 
 <script>
+
 export default {
-  name: "home"
+  name: "home",
+  data(){
+      return{
+        number:''
+      }
+  },
+  
 };
 </script>
 
@@ -90,12 +97,12 @@ footer input:hover{
   display: inline-block;
   position: absolute;
   right: 30px;
-  top: 20px;
+  top: 30px;
   }
 
   footer {
     font-size: 20px;
-    bottom: 0;
+    bottom: 5px;
   }
   footer input{
   height: 30px;
