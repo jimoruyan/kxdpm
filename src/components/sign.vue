@@ -48,14 +48,14 @@ export default {
 		}
 	},
   methods:{
-			send(){
+			send(){ //发送验证码
 	
 				this.ishow=true
 				var tip=document.getElementById('error_box')
-				let phonenum=this.phonenum
-				let url='https://dev.ishop.baison.net/frontend/pc_api/offline_activities/verification_code'
+				let phonnum=this.phonenum
+				let url='/pc_api/offline_activities/verification_code'
 				console.log('url',url)
-				axios.post(url,qs.stringify(this.phonenum)).then((response)=>{
+				this.axios.post(url,qs.stringify(this.phonenum)).then((response)=>{
 					console.log("请求成功",response.data)
 					tip.innerHTML=response.data.message
 					if(response.data.message==='手机号码格式错误'||response.data.message==='用户不存在'){
@@ -89,16 +89,16 @@ export default {
 				})
 					
 			},
-			sign(){
+			sign(){ //点击签到按钮
 				this.ishow=true
 				var tip=document.getElementById('error_box')
 				let phonenum=this.phonenum
 				let vcode=this.vcode
-				let url='https://dev.ishop.baison.net/frontend/pc_api/offline_activities/sign_in'
+				let url='/pc_api/offline_activities/sign_in'
 				console.log('url',url);
-				axios.post(url,qs.stringify(this.phonenum)).then(function(response){
+				this.axios.post(url,qs.stringify(this.phonenum)).then(function(response){
 					console.log("请求成功",response.data)
-						tip.innerHTML=response.data.message
+						tip.innerHTML=response.data.message 
 						
 					
 				},function(error){

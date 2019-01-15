@@ -17,8 +17,15 @@
 </template>
 
 <script>
+
 export default {
-  name: "home"
+  name: "home",
+  data(){
+      return{
+        number:''
+      }
+  },
+  
 };
 </script>
 
@@ -94,7 +101,7 @@ footer input:hover{
 
   footer {
     font-size: 20px;
-    bottom: 0;
+    bottom: 5px;
   }
   footer input{
   height: 30px;

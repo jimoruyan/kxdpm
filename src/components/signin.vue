@@ -1,12 +1,12 @@
 <template>
   <div id="sign">
    <ul>
-      <li v-for='(item,index) in imgs' :key='item.id'><img v-bind:src='item.img'></li>
-      <button id='ceshi' @click='num()' >测试</button>
+      <li v-for='(item,index) in imgs' :key='item.index'><img v-bind:src="'http://www.zdsapi.com'+item.img"></li> 
+      <!-- <button id='ceshi' @click='num()' >测试</button> -->
+      <!-- 测试按钮 -->
       <transition name='fade'> 
         <div id='tip' v-show='ishow'>
-        <div id='imgg'><img :src='last.img'><h6>{{last.name}}</h6></div>
-        
+        <div id='imgg'><img :src="'http://www.zdsapi.com'+last.img"><h6>{{last.name}}</h6></div>
         <div id='text'>签到成功{{number}}</div>
       </div>
         </transition>
@@ -23,81 +23,91 @@ export default {
     return{
       ishow:'',
       number:'',
-      imgs:[{name:'4',img:require('../assets/胡超15827509535.jpg')},{name:'4',img:require('../assets/胡超15827509535.jpg')},{name:'4',img:require('../assets/胡超15827509535.jpg')},{name:'10',img:require('../assets/胡超15827509535.jpg')}],
+      imgs:[],
       last:[],
-      send:{
-        order:'sign_in_time',
-       
-        
-      }
+      end_time:'',
+      websock:null,
+      timer:null,
+      list:[],
+      timer2:null
     }
   },
-  created(){
-     let send=this.send
-          let url='https://dev.ishop.baison.net/frontend/pc_api/offline_activities/sign_in'
-              console.log('url',url);
-              axios.get(url,{params:{order:'sign_in_time'}}).then((response)=>{
-              console.log("请求成功",response.data.data.users)
-              this.imgs=response.data.data.users
-              console.log(this.imgs)
-              },function(error){
+  mounted(){ 
+     //创建页面时获取签到的名单
+      let url='/pc_api/offline_activities/sign_in'
+      this.axios.get(url,{params:{order:'sign_in_time'}}).then((response)=>{
+          console.log("请求成功",response.data.data.users)
+          this.imgs=response.data.data.users
+      },
+      function(error){
               console.log("请求失败",error);
-                })
-                
-    setInterval(()=>{setTimeout(()=>{
-          
-          let send=this.send
-          let url='https://dev.ishop.baison.net/frontend/pc_api/offline_activities/sign_in'
-              console.log('url',url);
-              axios.get(url,{params:{order:'sign_in_time'}}).then((response)=>{
-              console.log("请求成功",response.data.data.users)
-              var newitem=response.data.data.users
-              this,imgs.pish(newitem)
-              console.log(this.imgs)
-              },function(error){
-              console.log("请求失败",error);
-                })
+        })
+  
+      //定时器每5秒获取当前时间前五秒之间的名单
+      this.timer=setInterval(()=>{
+            var timestamp=new Date().getTime()/1000;
+            console.log(timestamp)
+            let url='/pc_api/offline_activities/sign_in'
+            this.axios.get(url,{params:{order:'sign_in_time',start_time:timestamp-6.000,end_time:timestamp-1.000}}).then((response)=>{
+                console.log("请求成功",response.data.data.users)
+                var newitem=response.data.data.users
+                if(newitem.length!==0){
+                  this.list=this.list.concat(newitem) //与队列数组合并
+                }
+            },function(error){
+                console.log("请求失败",error);
+              })
 
-    },0)
-        
-
-    },5000)
+      },5000)
+    this.timer2=setInterval(()=>{ //定时将队列中的名单推送到签到墙中
+          console.log(this.list.length)
+          if(this.list.length!==0){
+              this.imgs.push(this.list[0])
+              this.list.shift()
+          }
       
-      // setInterval(()=>{
-      // var newitem={name:'4',img:require('../assets/胡超15827509535.jpg')};
-      // this.imgs.push(newitem);
-      //     },5000)
+     },3000)
   },
-  methods:{
-    num(){
-      var newitem={name:'4',img:require('../assets/胡超15827509535.jpg')};
-      this.imgs.push(newitem);
+  beforeDestroy(){  //离开界面销毁定时器
+    if(this.timer){
+       clearInterval(this.timer)
+    }
+    if(this.timer2){
+        clearInterval(this.timer2)
     }
   },
- watch:{
-   
-   imgs:{
-    handler:function(newVal){
-    var last=this.imgs[this.imgs.length-1]
-     this.last=last
-     console.log(last)
-      // var newitem={name:'4',img:require('../assets/胡超15827509535.jpg')};
-      // this.imgs.push(newitem);
-      var li=document.getElementsByTagName('li');
-      var length=li.length;
-      this.number=length+1;
-      console.log(length);
-      this.ishow=!this.ishow;
-      setTimeout(()=>{
-       this.ishow=!this.ishow
-          },2000)
-          console.log(newVal)
+ 
+methods:{
+    num(){ //测试按钮
+      var newitem=[{name:'1',img:require('../assets/胡超15827509535.jpg')},{name:'2',img:require('../assets/胡超15827509535.jpg')}];
+      this.list=this.list.concat(newitem)
+      console.log(this.list)
+     
+        
     },
-    deep:true
-   
+},
+ watch:{
+    list:function(){
+      console.log(this.list.length)  
+    },
+      imgs:function(){
+            var last=this.imgs[this.imgs.length-1]
+            this.last=last
+            console.log(last)
+            var li=document.getElementsByTagName('li');
+            var length=li.length;
+            this.number=length+1;
+            console.log(length);
+            this.ishow=!this.ishow;
+        setTimeout(()=>{
+            this.ishow=!this.ishow
+        },2000)   
       
-    }
-  }
+     
+   },
+   //监听数组变化显示提示签到信息
+
+}
 }
 </script>
 
