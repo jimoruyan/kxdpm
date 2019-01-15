@@ -19,7 +19,7 @@ export default {
 
 <style>
 #app {
-  background: url(./assets/bg.png)no-repeat;
+  background: url(./assets/bg.jpg)no-repeat;
   background-position: center center;
   background-size: cover;
   background-color: #fff;

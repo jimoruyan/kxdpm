@@ -146,6 +146,7 @@ export default {
       if (num == 1) {
         this.move();
       } else {
+        //抽取多人
         this.move();
         this.generatorPromise(num).then(res1 => {
           this.move();
@@ -267,7 +268,7 @@ export default {
             }
           }
           this.re_luck.lottery_id = this.re_luck.lottery_id.slice(1);
-          this.axios //删除中奖名单
+          this.axios //删除中奖名单（多个）
             .delete("/pc_api/offline_activities/lottery", {
               data: this.re_luck
             })
@@ -286,7 +287,7 @@ export default {
     del: function(id) {
       this.re_luck.lottery_id = "";
       this.re_luck.lottery_id = "" + id;
-      this.axios //删除中奖名单
+      this.axios //删除中奖名单（一个）
         .delete("/pc_api/offline_activities/lottery", {
           data: this.re_luck
         })

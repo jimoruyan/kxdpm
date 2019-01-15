@@ -60,6 +60,15 @@ export default {
   padding: 10px;
   background: rgba(0,0,0,.5);
 }
+#luckdraw .rigth{
+      box-sizing: border-box;
+    position: relative;
+    font-size: 24px;
+    color: white;
+    margin: 0 auto;
+    width: 960px;
+    display: inline-block;
+}
 #luckdraw .luck_user ul {
   position: relative;
 }
