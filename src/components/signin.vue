@@ -36,7 +36,6 @@ export default {
      //创建页面时获取签到的名单
       let url='/pc_api/offline_activities/sign_in'
       this.axios.get(url,{params:{order:'sign_in_time'}}).then((response)=>{
-          console.log("请求成功",response.data.data.users)
           this.imgs=response.data.data.users
       },
       function(error){
@@ -46,10 +45,8 @@ export default {
       //定时器每5秒获取当前时间前五秒之间的名单
       this.timer=setInterval(()=>{
             var timestamp=new Date().getTime()/1000;
-            console.log(timestamp)
             let url='/pc_api/offline_activities/sign_in'
             this.axios.get(url,{params:{order:'sign_in_time',start_time:timestamp-6.000,end_time:timestamp-1.000}}).then((response)=>{
-                console.log("请求成功",response.data.data.users)
                 var newitem=response.data.data.users
                 if(newitem.length!==0){
                   this.list=this.list.concat(newitem) //与队列数组合并
@@ -60,7 +57,6 @@ export default {
 
       },5000)
     this.timer2=setInterval(()=>{ //定时将队列中的名单推送到签到墙中
-          console.log(this.list.length)
           if(this.list.length!==0){
               this.imgs.push(this.list[0])
               this.list.shift()
@@ -81,23 +77,19 @@ methods:{
     num(){ //测试按钮
       var newitem=[{name:'1',img:require('../assets/胡超15827509535.jpg')},{name:'2',img:require('../assets/胡超15827509535.jpg')}];
       this.list=this.list.concat(newitem)
-      console.log(this.list)
      
         
     },
 },
  watch:{
     list:function(){
-      console.log(this.list.length)  
     },
       imgs:function(){
             var last=this.imgs[this.imgs.length-1]
             this.last=last
-            console.log(last)
             var li=document.getElementsByTagName('li');
             var length=li.length;
             this.number=length+1;
-            console.log(length);
             this.ishow=!this.ishow;
         setTimeout(()=>{
             this.ishow=!this.ishow
