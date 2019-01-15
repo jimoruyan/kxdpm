@@ -8,6 +8,7 @@ import lucked from './components/lucked.vue'
 
 
 
+
 export default[
     {path:"/",redirect:"/home"},
     {path:"/home",component:home,
@@ -24,6 +25,7 @@ export default[
           path: '/signin',
           component: signin
         },
+        
         {path:"/index",component:index},
         {path:"/lucked",component:lucked},
       ]},
