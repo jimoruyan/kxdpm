@@ -42,7 +42,7 @@
         <i class="icon icon-title"></i>中奖名单
         <div class="resultNum">
           获奖人数:
-          <span id="luckNumber">54</span>
+          <span id="luckNumber">25</span>
         </div>
         <i class="icon icon-more"></i>
       </div>
@@ -636,7 +636,7 @@ export default {
   #luckdraw .left .condition .select > div {
     display: inline-block;
     width: 160px;
-    /* margin-left: 40px; */
+    margin-left: 60px;
   }
   #luckdraw .left .condition select {
     border-radius: 5px;
