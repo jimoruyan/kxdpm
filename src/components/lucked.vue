@@ -17,7 +17,7 @@
           </label>
           <ul class="luckUl">
             <li v-for="(lists,index) in lucked[index].users" :key="index">
-              <img src="../assets/me.jpg" alt>
+              <img :src="'http://www.zdsapi.com/'+lists.img" alt>
               <span>{{lists.user_name}}</span>
             </li>
           </ul>
@@ -34,32 +34,10 @@ export default {
   name: "luckdraw",
   data() {
     return {
-      options: [
-        { value: 0, text: "一等奖" },
-        { value: 1, text: "二等奖" },
-        { value: 2, text: "三等奖" },
-        { value: 3, text: "参与奖" }
-      ],
-      selecteds: "",
-      userList: "",
-      signed: [],  //签到名单
-      luck:{       //上传中奖名单
-        award_id:"3",
-        user_ids:"3,4,5"
-      },
       lucked:"",  //获取中奖名单    
     };
   },
   created() {
-    this.selecteds = this.options[0].value;
-    this.axios
-      .get("/pc_api/offline_activities/sign_in")
-      .then(function(data) {
-        return data.data.data;
-      })
-      .then(data => {
-        this.signed = data;
-      });
       this.axios
       .get("/pc_api/offline_activities/lottery")
       .then(function(data) {
