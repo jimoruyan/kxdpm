@@ -11,6 +11,7 @@
           <ul ref="oUl" style="width:28500px;">
             <li class="oLi" v-for="(list,index) in signed" :key="index">
               <img :src="'http://www.zdsapi.com/'+list.img">
+              <!-- <img :src="'http://www.zdsapi.com/'+list.img"> -->
               <span>{{list.name}}</span>
             </li>
           </ul>
@@ -93,7 +94,7 @@ export default {
         lottery_id: ""
       },
       begin_luck: {
-        award_id: "2",
+        award_id: "",
         num: "1"
       },
       id: "",
@@ -203,7 +204,7 @@ export default {
         alert("二等奖名额已满！");
         return;
       } else {
-        this.luckState = false; //抽奖状态
+        
         this.axios //抽奖
           .get(
             "/pc_api/offline_activities/prize_draw?" +
@@ -219,6 +220,8 @@ export default {
           }
           oUl.style.left = oUl.offsetLeft - speed + "px";
         }, 10);
+           this.luckState = false; //抽奖状态
+       
       }
     },
     stopLuck: function() {
