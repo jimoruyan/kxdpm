@@ -10,7 +10,6 @@
         <div class="luck_user">
           <ul ref="oUl" style="width:28500px;">
             <li class="oLi" v-for="(list,index) in signed" :key="index">
-              <!-- <a href=""></a> -->
               <img :src="'http://www.zdsapi.com/'+list.img">
               <span>{{list.name}}</span>
             </li>
@@ -36,7 +35,6 @@
       <div class="btn-box">
         <button @click="starMove" v-if="luckState">开始抽奖</button>
         <button @click="stopLuck" v-if="!luckState">停止抽奖</button>
-        <!-- <button @click="starMove" v-if="!luckState && selecteds>1">自动抽奖</button> -->
       </div>
     </div>
     <div class="right">
@@ -119,7 +117,6 @@ export default {
         return data.data.data;
       })
       .then(data => {
-        // console.log(data);
         this.signed = data.users;
         this.liNum = this.signed.length;
       });
@@ -129,7 +126,6 @@ export default {
         return data.data.data;
       })
       .then(data => {
-        // console.log(data);
         this.lucked = data;
       });
   },
@@ -189,18 +185,6 @@ export default {
         }, 3000);
       });
     },
-    // 获取抽奖id
-    // star_get: (luck_id)=>{
-    //      this.axios //抽奖
-    //       .get(
-    //         "/pc_api/offline_activities/prize_draw?" +
-    //           qs.stringify(luck_id)
-    //       )
-    //       .then(data => {
-    //         let lucks = data.data.data;
-    //         this.id = lucks[0].id;
-    //       });
-    // },
     move: function() {
       var oUl = this.$refs.oUl; //获取抽奖区节点
       var liWidth = this.liWidth; //抽奖池图片的宽度
@@ -219,7 +203,6 @@ export default {
         return;
       } else {
         this.luckState = false; //抽奖状态
-
         this.axios //抽奖
           .get(
             "/pc_api/offline_activities/prize_draw?" +
@@ -248,7 +231,6 @@ export default {
       for (let i = 0; i < this.signed.length; i++) {
         this.signed[i].index = i;
         if (this.signed[i].id == this.id) {
-          console.log(1);
           if (this.signed[i].index == 0) {
             oUl.style.left = liWidth + "px";
           } else {
@@ -256,8 +238,6 @@ export default {
           }
         }
       }
-
-      console.log(this.signed);
       //获取中奖名单
       this.axios
         .get("/pc_api/offline_activities/lottery")
@@ -304,7 +284,6 @@ export default {
         });
     },
     del: function(id) {
-      // console.log(id);
       this.re_luck.lottery_id = "";
       this.re_luck.lottery_id = "" + id;
       this.axios //删除中奖名单
