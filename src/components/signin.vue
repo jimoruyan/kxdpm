@@ -75,7 +75,7 @@ export default {
  
 methods:{
     num(){ //测试按钮
-      var newitem=[{name:'1',img:require('../assets/胡超15827509535.jpg')},{name:'2',img:require('../assets/胡超15827509535.jpg')}];
+      var newitem=[{name:'1',img:require('../assets/me.jpg')},{name:'2',img:require('../assets/me.jpg')}];
       this.list=this.list.concat(newitem)
      
         
