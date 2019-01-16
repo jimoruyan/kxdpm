@@ -26,9 +26,9 @@
 				<h1 id='text'></h1>
        	</div>
       </transition>
-    <div class="img">
+    <!-- <div class="img">
       <img src='../assets/222.png'>
-    </div> 
+    </div>  -->
   </div>
 </template>
 <script>
@@ -165,7 +165,7 @@ export default {
 }
 .img{
   position: relative;
-	top: 470px;
+	top: 430px;
 	text-align: center;
 }
 .img img{
