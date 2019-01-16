@@ -95,7 +95,7 @@ export default {
 					
 			},
 			sign(){ //点击签到按钮
-				this.ishow2=true
+				this.ishow2=!this.ishow2
 				setTimeout(()=>{
             				this.ishow2=!this.ishow2
         					},2000)   
