@@ -58,7 +58,7 @@ export default {
 				this.ishow=true
 				var tip=document.getElementById('error_box')
 				let phonnum=this.phonenum
-				let url='http://www.zdsapi.com/pc_api/offline_activities/verification_code'
+				let url='/pc_api/offline_activities/verification_code'
 				console.log('url',url)
 				this.axios.post(url,qs.stringify(this.phonenum)).then((response)=>{
 					console.log("请求成功",response.data)
@@ -103,7 +103,7 @@ export default {
 				var tip2=document.getElementById('text')
 				let phonenum=this.phonenum
 				let vcode=this.vcode
-				let url='http://www.zdsapi.com/pc_api/offline_activities/sign_in'
+				let url='/pc_api/offline_activities/sign_in'
 				console.log('url',url);
 				this.axios.post(url,qs.stringify(this.phonenum)).then(function(response){
 					console.log("请求成功",response.data)
