@@ -12,7 +12,7 @@ import baseURL from './axios-auth.js'
 Vue.use(VueRouter)
 Vue.use(vuex)
 
-axios.defaults.baseURL = baseURL.baseURL;
+axios.defaults.baseURL = baseURL.baseURL; 
 
 //请求头加token
 axios.interceptors.request.use(
@@ -41,6 +41,7 @@ router.beforeEach((to, from, next) => {
   } else {
     let token = localStorage.getItem('Authorization');
     if (token === 'null' || token === '' || token === null) {
+      // next();
       next('/login');
     } else {
       next();

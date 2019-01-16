@@ -1,12 +1,12 @@
 <template>
   <div id="sign">
    <ul>
-      <li v-for='(item,index) in imgs'><img v-bind:src='item.img'></li>
-      <button @click='num()' >测试</button>
+      <li v-for='(item,index) in imgs' :key='item.index'><img v-bind:src="'http://www.zdsapi.com'+item.img"></li> 
+      <!-- <button id='ceshi' @click='num()' >测试</button> -->
+      <!-- 测试按钮 -->
       <transition name='fade'> 
         <div id='tip' v-show='ishow'>
-        <div id='imgg'><img src='../assets/3.jpg'><h6>leisiming</h6></div>
-        
+        <div id='imgg'><img :src="'http://www.zdsapi.com'+last.img"><h6>{{last.name}}</h6></div>
         <div id='text'>签到成功</div>
       </div>
         </transition>
@@ -15,49 +15,91 @@
 </template>
 
 <script>
-
+import axios from 'axios'
+import qs from 'qs'
 export default {
   name: 'sign',
   data(){
     return{
       ishow:'',
-      imgg:'',
       number:'',
-      imgs:[
-        {name:'1',img:require('../assets/1.jpg')},
-        {name:'2',img:require('../assets/2.jpg')},
-        {name:'3',img:require('../assets/3.jpg')},
-        {name:'4',img:require('../assets/4.jpg')},
-        {name:'5',img:require('../assets/5.jpg')},
-        {name:'6',img:require('../assets/6.jpg')},
-        {name:'7',img:require('../assets/7.jpg')},
-        {name:'8',img:require('../assets/8.jpg')},
-        {name:'9',img:require('../assets/9.jpg')},
-        {name:'10',img:require('../assets/10.jpg')},
-        {name:'11',img:require('../assets/11.jpg')},
-        {name:'12',img:require('../assets/12.jpg')},
-        {name:'13',img:require('../assets/13.jpg')},
-        {name:'14',img:require('../assets/14.jpg')},
-      
-      ]
+      imgs:[],
+      last:[],
+      end_time:'',
+      websock:null,
+      timer:null,
+      list:[],
+      timer2:null
     }
   },
-  methods:{
-   num(){
-      var newitem={name:'15',img:require('../assets/1.jpg')};
-      this.imgs.push(newitem);
-      var li=document.getElementsByTagName('li');
-      var length=li.length+1;
-      this.number=length;
-      console.log(length);
-      this.ishow=!this.ishow;
-      setTimeout(()=>{
-       this.ishow=!this.ishow
+  mounted(){ 
+     //创建页面时获取签到的名单
+      let url='/pc_api/offline_activities/sign_in'
+      this.axios.get(url,{params:{order:'sign_in_time'}}).then((response)=>{
+          this.imgs=response.data.data.users
+      },
+      function(error){
+              console.log("请求失败",error);
+        })
+  
+      //定时器每5秒获取当前时间前五秒之间的名单
+      this.timer=setInterval(()=>{
+            var timestamp=new Date().getTime()/1000;
+            let url='/pc_api/offline_activities/sign_in'
+            this.axios.get(url,{params:{order:'sign_in_time',start_time:timestamp-6.000,end_time:timestamp-1.000}}).then((response)=>{
+                var newitem=response.data.data.users
+                if(newitem.length!==0){
+                  this.list=this.list.concat(newitem) //与队列数组合并
+                }
+            },function(error){
+                console.log("请求失败",error);
+              })
+
+      },5000)
+    this.timer2=setInterval(()=>{ //定时将队列中的名单推送到签到墙中
+          if(this.list.length!==0){
+              this.imgs.push(this.list[0])
+              this.list.shift()
+          }
+      
+     },3000)
+  },
+  beforeDestroy(){  //离开界面销毁定时器
+    if(this.timer){
+       clearInterval(this.timer)
+    }
+    if(this.timer2){
+        clearInterval(this.timer2)
+    }
+  },
+ 
+methods:{
+    num(){ //测试按钮
+      var newitem=[{name:'1',img:require('../assets/me.jpg')},{name:'2',img:require('../assets/me.jpg')}];
+      this.list=this.list.concat(newitem)
+     
+        
+    },
+},
+ watch:{
+    list:function(){
+    },
+      imgs:function(){
+            var last=this.imgs[this.imgs.length-1]
+            this.last=last
+            var li=document.getElementsByTagName('li');
+            var length=li.length;
+            this.number=length+1;
+            this.ishow=!this.ishow;
+        setTimeout(()=>{
+            this.ishow=!this.ishow
+        },2000)   
       
      
-          },2000)
-    }
-  }
+   },
+   //监听数组变化显示提示签到信息
+
+}
 }
 </script>
 
@@ -68,6 +110,11 @@ export default {
 .fade-enter,.fade-leave-to{
  opacity: 0;
   
+}
+#ceshi {
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
 }
 #tip{
   position: absolute;
@@ -85,6 +132,7 @@ export default {
   border-radius: 10px;
   background-color: white;
   position: relative;
+  overflow: hidden;
 }
 #imgg h6{
   font-size: 15px;
@@ -119,25 +167,27 @@ export default {
 #sign {
   max-width: 1200px;
   margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 6px;
 }
 ul{
-  height: 798px;
+  
+  height: 770px;
   overflow: hidden;
   
 }
 li{
  
   list-style: none;
-  height: 96px;
-  width: 64px;
-  margin-right: 5px;
-  margin-bottom: 5px;
+  height: 90px;
+  width: 60px;
+  margin: 3px;
   background-color:rgba(0, 0, 0, 0.8  );
   display: inline-block;
 }
 li img{
-  height: 96px;
-  width: 64px;
+  height: 90px;
+  width: 60px;
 }
 
 
@@ -145,25 +195,27 @@ li img{
 #sign {
   max-width: 960px;
   margin: 0px auto;
+  padding: 7px;
+  
 }
 
 ul{
-  height: 480px;
+  height: 460px;
   overflow: hidden;
+  
   
 }
 li{
   list-style: none;
-  height: 75px;
-  width: 50px;
-  margin-right: 5px;
-  margin-bottom: 5px;
+  height: 61.5px;
+  width: 41px;
+  margin: 2px;
   background-color:rgba(0, 0, 0, 0.8  );
   display: inline-block;
 }
 li img{
-  height: 75px;
-  width: 50px;
+  height: 61.5px;
+  width: 41px;
 }
 #tip{
   position: absolute;

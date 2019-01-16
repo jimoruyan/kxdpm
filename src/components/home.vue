@@ -12,13 +12,21 @@
       <router-link to="/luckdraw" exact><input type='button' value="抽奖"></router-link>
       <router-link to="/sign" exact><input type='button' value="签到"></router-link>
       <router-link to="/lucked" exact><input type='button' value="获奖名单"></router-link>
+
     </footer>
   </div>
 </template>
 
 <script>
+
 export default {
-  name: "home"
+  name: "home",
+  data(){
+      return{
+        number:''
+      }
+  },
+  
 };
 </script>
 
@@ -83,18 +91,17 @@ footer input:hover{
   width: 90px;
   height: 90px;
   display: inline-block;
-}
+  }
   #name{
   width: 200px;
   display: inline-block;
   position: absolute;
   right: 30px;
-  top: 20px;
+  top: 30px;
   }
 
   footer {
     font-size: 20px;
-    position: absolute;
     bottom: 5px;
   }
   footer input{

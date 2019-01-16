@@ -39,7 +39,7 @@ export default {
 			timer:null,
 			msg:"获取验证码",
 			phonenum:{
-				phone:'18186424859',
+				phone:'',
 				vcode:''
 			},
 			
@@ -48,18 +48,24 @@ export default {
 		}
 	},
   methods:{
-			send(){
+			send(){ //发送验证码
+	
 				this.ishow=true
 				var tip=document.getElementById('error_box')
-				let phonenum=this.phonenum
-				axios.post("/pc_api/offline_activities/sign_in",qs.stringify(this.phonenum)).then(function(response){
+				let phonnum=this.phonenum
+				let url='/pc_api/offline_activities/verification_code'
+				console.log('url',url)
+				this.axios.post(url,qs.stringify(this.phonenum)).then((response)=>{
 					console.log("请求成功",response.data)
 					tip.innerHTML=response.data.message
-				},function(error){
-					console.log("请求失败",error);
-				
-				})
-					if(!this.timer){
+					if(response.data.message==='手机号码格式错误'||response.data.message==='用户不存在'){
+							this.msg='获取验证码';
+							this.time=60;
+							this.timer=null;
+							this.disable=false;
+					}else{
+							if(!this.timer){
+											this.disable=true
 						this.timer=setInterval(()=>{
 							if(this.time>0&&this.time<=60){
 								this.time--;
@@ -76,17 +82,23 @@ export default {
 							}
 						},1000);
 					}
+					}
+				},function(error){
+					console.log("请求失败",error);
+				
+				})
+					
 			},
-			sign(){
+			sign(){ //点击签到按钮
 				this.ishow=true
 				var tip=document.getElementById('error_box')
 				let phonenum=this.phonenum
 				let vcode=this.vcode
-				let url='http://www.zdsapi.com/pc_api/offline_activities/sign_in'
+				let url='/pc_api/offline_activities/sign_in'
 				console.log('url',url);
-				axios.post(url,qs.stringify(this.phonenum)).then(function(response){
+				this.axios.post(url,qs.stringify(this.phonenum)).then(function(response){
 					console.log("请求成功",response.data)
-						tip.innerHTML=response.data.message
+						tip.innerHTML=response.data.message 
 						
 					
 				},function(error){

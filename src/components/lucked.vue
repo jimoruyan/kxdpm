@@ -5,19 +5,20 @@
         <i class="icon icon-title"></i>中奖名单
         <div class="resultNum">
           获奖人数:
-          <span id="luckNumber">54</span>
+          <span id="luckNumber">{{lottery_num}}</span>
         </div>
         <i class="icon icon-more"></i>
       </div>
       <div id="luckUl" class="result">
-        <div  class="level" v-for="(list,index) in lucked" :key="index">
+        <div class="level" v-for="(list,index) in lucked" :key="index">
           <label>
             {{list.award_name}}
             <a></a>
           </label>
           <ul class="luckUl">
             <li v-for="(lists,index) in lucked[index].users" :key="index">
-              <img src="../assets/me.jpg" alt>
+              <img :src="'http://www.zdsapi.com/'+lists.img">
+              <!-- <img :src="'http://www.zdsapi.com/'+lists.img"> -->
               <span>{{lists.user_name}}</span>
             </li>
           </ul>
@@ -34,53 +35,45 @@ export default {
   name: "luckdraw",
   data() {
     return {
-      options: [
-        { value: 0, text: "一等奖" },
-        { value: 1, text: "二等奖" },
-        { value: 2, text: "三等奖" },
-        { value: 3, text: "参与奖" }
-      ],
-      selecteds: "",
-      userList: "",
-      signed: [],  //签到名单
-      luck:{       //上传中奖名单
-        award_id:"3",
-        user_ids:"3,4,5"
-      },
-      lucked:"",  //获取中奖名单    
+      lucked: "", //获取中奖名单
+      lottery_num: 0
     };
   },
   created() {
-    this.selecteds = this.options[0].value;
     this.axios
-      .get("/pc_api/offline_activities/sign_in")
-      .then(function(data) {
-        return data.data.data;
-      })
-      .then(data => {
-        this.signed = data;
-      });
-      this.axios
       .get("/pc_api/offline_activities/lottery")
       .then(function(data) {
         return data.data.data;
       })
       .then(data => {
+        this.lottery_num = 0;
+        for (let i = 0; i < data.length; i++) {
+          this.lottery_num = this.lottery_num + data[i].users.length;
+        }
         this.lucked = data;
       });
-  },
+  }
 };
 </script>
 
 <style scoped>
 #luckdraw {
-  position: absolute;
+  position: sticky;
   max-width: 1200px;
-  top: 140px;
-  margin: 0 auto;
+  margin: 60px auto;
   box-sizing: border-box;
   box-shadow: 0 0 8px hsla(0, 0%, 100%, 0.5);
   padding: 10px;
+  background: rgba(0, 0, 0, 0.5);
+}
+#luckdraw .rigth {
+  box-sizing: border-box;
+  position: relative;
+  font-size: 24px;
+  color: white;
+  margin: 0 auto;
+  width: 960px;
+  display: inline-block;
 }
 #luckdraw .luck_user ul {
   position: relative;
@@ -105,6 +98,7 @@ export default {
   position: relative;
   font-size: 24px;
   color: white;
+  margin: 0 auto;
   width: 960px;
   display: inline-block;
 }
@@ -142,7 +136,7 @@ export default {
   cursor: pointer;
 }
 #luckdraw .right .result {
-  height: 300px;
+  height: 500px;
   overflow: auto;
 }
 #luckdraw .right .level {
@@ -214,5 +208,14 @@ export default {
   border-radius: 100%;
   margin: auto;
   margin-bottom: 10px;
+}
+@media screen and (max-width: 1024px) {
+  #luckdraw .right .result {
+    height: 350px;
+    margin-bottom: 0;
+  }
+  #luckdraw {
+    margin: 5px auto;
+  }
 }
 </style>

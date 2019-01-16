@@ -10,7 +10,8 @@
         <div class="luck_user">
           <ul ref="oUl" style="width:28500px;">
             <li class="oLi" v-for="(list,index) in signed" :key="index">
-              <img src="../assets/me.jpg">
+              <img :src="'http://www.zdsapi.com/'+list.img">
+              <!-- <img :src="'http://www.zdsapi.com/'+list.img"> -->
               <span>{{list.name}}</span>
             </li>
           </ul>
@@ -26,13 +27,16 @@
           </div>
           <div class="num">
             人数：
-            <select></select>
+            <select v-model="luck_num">
+              <option :value="se.value" v-for="(se,index) in luck_nums" :key="index">{{se.text}}</option>
+            </select>
           </div>
         </div>
       </div>
       <div class="btn-box">
-        <button @click="starMove" v-if="luckState">开始抽奖</button>
-        <button @click="stopLuck" v-if="!luckState">停止抽奖</button>
+        <button @click="starMove" v-if="luckState==1">开始抽奖</button>
+        <button style="background:#eee" v-if="luckState==2">停止抽奖</button>
+        <button @click="stopLuck" v-if="luckState==3">停止抽奖</button>
       </div>
     </div>
     <div class="right">
@@ -40,19 +44,18 @@
         <i class="icon icon-title"></i>中奖名单
         <div class="resultNum">
           获奖人数:
-          <span id="luckNumber">54</span>
+          <span id="luckNumber">{{lottery_num}}</span>
         </div>
         <i class="icon icon-more"></i>
       </div>
       <div id="luckUl" class="result">
-        <div  class="level" v-for="(list,index) in lucked" :key="index">
-          <label>
-            {{list.award_name}}
-            <a></a>
-          </label>
+        <div class="level" v-for="(list,index) in lucked" :key="index">
+          <label>{{list.award_name}}</label>
           <ul class="luckUl">
             <li v-for="(lists,index) in lucked[index].users" :key="index">
-              <img src="../assets/me.jpg" alt>
+              <a @click="del(lists.lottery_id)"></a>
+              
+              <img :src="'http://www.zdsapi.com/'+lists.img" alt>
               <span>{{lists.user_name}}</span>
             </li>
           </ul>
@@ -60,8 +63,8 @@
       </div>
 
       <div class="btn-box">
-        <a class="btn reclick">重新抽奖</a>
-        <a class="btn submitUser" id="submitLottery">确认名单</a>
+        <a class="btn reclick" @click="again">重新抽奖</a>
+        <router-link to="/lucked" exact>获奖名单</router-link>
       </div>
     </div>
   </div>
@@ -74,119 +77,257 @@ export default {
   name: "luckdraw",
   data() {
     return {
-      img_width: "",
-      img_num: "",
-      luckState: true, //抽奖状态
-      timer: null, // 定时器
-      scrollRange: null, //每个li的长度，根据窗口大小设置
+      luckState: 1, //抽奖状态1.开始抽奖2.不可选取3.停止抽奖
       beginTimer: null,
-      stopTimer: null,
-      liWidth: null,
-      liNum: null,
+      liWidth: null,//每个头像的宽度
+      liNum: null,//签到的人数
       options: [
-        { value: 0, text: "特等奖" },
-        { value: 1, text: "一等奖" },
-        { value: 2, text: "二等奖" }
+        { value: 1, text: "特等奖" },
+        { value: 2, text: "一等奖" },
+        { value: 3, text: "二等奖" }
       ],
-      selecteds: "",
+      selecteds: "",//获取下拉框选项
       userList: "",
       signed: [], //签到名单
-      luck: {
-        //上传中奖名单
-        award_id: "3",
-        user_ids: "3,4,5"
+      lucked: "", //获取中奖名单
+      num: "", //中奖索引
+      re_luck: {
+        //获取中奖ID然后删除
+        lottery_id: ""
       },
-      lucked: "" //获取中奖名单
+      begin_luck: {
+        //传入抽奖的种类
+        award_id: "",
+        num: "1"
+      },
+      id: "", //中奖人的id
+      luck_nums: [
+        //下拉框人数
+        { value: 1, text: "1" },
+        { value: 2, text: "2" },
+        { value: 3, text: "3" },
+        { value: 4, text: "4" },
+        { value: 5, text: "5" }
+      ],
+      luck_num: "", //获取下拉框的人数
+      lottery_num: 0 //中奖人总数
     };
   },
   created() {
-    // let _this = this;
     this.selecteds = this.options[0].value;
-    this.axios    //获取签单名单
+    this.luck_num = this.luck_nums[0].value;
+
+    this.axios //获取签单名单
       .get("/pc_api/offline_activities/sign_in")
-      .then( data=> {
+      .then(data => {
         return data.data.data;
       })
       .then(data => {
         this.signed = data.users;
         this.liNum = this.signed.length;
       });
-      this.axios    //获取中奖名单
+    this.axios //获取中奖名单
       .get("/pc_api/offline_activities/lottery")
       .then(data => {
         return data.data.data;
       })
       .then(data => {
+        this.lottery_num = 0;
+        for (let i = 0; i < data.length; i++) {
+          this.lottery_num = this.lottery_num + data[i].users.length;
+        }
         this.lucked = data;
-        console.log(this.lucked);
       });
-    
   },
   mounted() {
     let oUl = this.$refs.oUl;
-    
     if (window.innerWidth <= 1024) {
       //根据窗口宽度调整头像宽度
       this.liWidth = 140;
       oUl.style.left = 140 + "px";
-      // oUl.style.width = this.liWidth * this.liNum + "px";
     } else {
       this.liWidth = 190;
       oUl.style.left = 190 + "px";
-      // oUl.style.width = this.liWidth * this.liNum + "px";
     }
   },
   methods: {
     starMove: function() {
-      let oUl = this.$refs.oUl; //获取抽奖区节点
-      let liWidth = this.liWidth; //抽奖池图片的宽度
-      let liNum = this.liNum; //抽奖池人数
-      // let liNum = this.userList.length;                          //抽奖池人数
-
-      this.luckState = false; //抽奖状态
+      var num = this.luck_num;
+      if (num == 1) {
+        this.move();
+      } else {
+        this.move();
+        this.generatorPromise(num).then(res1 => {
+          this.move();
+          if (res1 == 0) return;
+          this.generatorPromise(res1).then(res2 => {
+            if (res2 == 0) return;
+            this.move();
+            this.generatorPromise(res2).then(res3 => {
+              if (res3 == 0) return;
+              this.move();
+              this.generatorPromise(res3).then(res4 => {
+                if (res4 == 0) return;
+                this.move();
+                this.generatorPromise(res4).then(res5 => {
+                  if (res5 == 0) return;
+                  this.move();
+                  this.generatorPromise(res5).then(res6 => {
+                    if (res6 == 0) return;
+                    this.move();
+                  });
+                });
+              });
+            });
+          });
+        });
+      }
+    },
+    generatorPromise: function(num) {
+      return new Promise((res, rej) => {
+        setTimeout(() => {
+          this.stopLuck();
+          setTimeout(() => {
+            num--;
+            res(num);
+          }, 1000);
+        }, 3000);
+      });
+    },
+    move: function() {
+      var oUl = this.$refs.oUl; //获取抽奖区节点
+      var liWidth = this.liWidth; //抽奖池图片的宽度
+      var liNum = this.liNum; //抽奖池人数
       var speed = 50; //抽奖速度
+      this.begin_luck.award_id = this.selecteds;
       clearInterval(this.beginTimer);
-      this.beginTimer = setInterval(function() {
-        if (oUl.offsetLeft <= -liWidth * (liNum - 1)) {
-          oUl.style.left = liWidth + "px";
-        }
-        oUl.style.left = oUl.offsetLeft - speed + "px";
-      }, 10);
+      if (this.selecteds == 1 && this.lucked[0].users.length == 1) {
+        alert("特等奖数量不足！");
+        return;
+      } else if (this.selecteds == 2 && this.lucked[1].users.length == 5) {
+        alert("一等奖数量不足！");
+        return;
+      } else if (this.selecteds == 3 && this.lucked[2].users.length ==10) {
+        alert("二等奖数量不足！");
+        return;
+      } else {
+        this.axios //抽奖
+          .get(
+            "/pc_api/offline_activities/prize_draw?" +
+              qs.stringify(this.begin_luck)
+          )
+          .then(data => {
+            let lucks = data.data.data;
+            this.id = lucks[0].id;
+          });
+        this.beginTimer = setInterval(function() {
+          if (oUl.offsetLeft <= -liWidth * (liNum - 1)) {
+            oUl.style.left = liWidth + "px";
+          }
+          oUl.style.left = oUl.offsetLeft - speed + "px";
+        }, 10);
+        this.luckState = 2; //抽奖状态
+        setTimeout(() => {
+          this.luckState = 3;
+        }, 1000);
+      }
     },
     stopLuck: function() {
       let oUl = this.$refs.oUl; //获取抽奖区节点
       let liWidth = this.liWidth; //抽奖池图片的宽度
-      let oLi = document.getElementsByClassName("oLi"); //获取抽奖池节点
-      let luckUl = document.getElementsByClassName("luckUl"); //获取奖金池节点
-      let distance = oUl.offsetLeft % this.liWidth; //获取定时器停止时宽度差
       let selected = this.selecteds; //获取下拉框节点
       let liNum = this.liNum;
-      console.log(oUl.offsetLeft);
+
       clearInterval(this.beginTimer);
-      if (oUl.offsetLeft > 0) {
-        oUl.style.left = liWidth + "px";
-      } else if (oUl.offsetLeft <= -liWidth * (liNum - 1)) {
-        oUl.style.left = oUl.offsetLeft + liWidth - distance + "px";
-      } else {
-        oUl.style.left = oUl.offsetLeft - distance + "px";
+
+      for (let i = 0; i < this.signed.length; i++) {
+        this.signed[i].index = i;
+        if (this.signed[i].id == this.id) {
+          if (this.signed[i].index == 0) {
+            oUl.style.left = liWidth + "px";
+          } else {
+            oUl.style.left = -liWidth * (this.signed[i].index - 1) + "px";
+          }
+        }
       }
-      let _num = -oUl.offsetLeft / liWidth; //获取中奖人
-      let luckLi = oLi[_num + 1].cloneNode(true);
-      luckUl[selected].appendChild(luckLi);
-      this.luckState = true;
+      //获取中奖名单
+      this.axios
+        .get("/pc_api/offline_activities/lottery")
+        .then(data => {
+          return data.data.data;
+        })
+        .then(data => {
+          console.log(data);
+          this.lottery_num = 0;
+          for (let i = 0; i < data.length; i++) {
+            this.lottery_num = this.lottery_num + data[i].users.length;
+          }
+          this.lucked = data;
+        });
+      this.luckState = 1;
     },
-    // again: function() {
-    //   this.axios    //删除中奖名单
-    //   .delete("/pc_api/offline_activities/lottery")
-    //   .then(data => {
-    //     console.log(data)
-    //   });
-    // }
+    again: function() {
+      //清除所有中奖名单
+      this.axios //获取中奖名单
+        .get("/pc_api/offline_activities/lottery")
+        .then(data => {
+          return data.data.data;
+        })
+        .then(data => {
+          this.re_luck.lottery_id = "";
+          for (let i = 0; i < this.lucked.length; i++) {
+            for (let j = 0; j < this.lucked[i].users.length; j++) {
+              this.re_luck.lottery_id =
+                this.re_luck.lottery_id +
+                "," +
+                this.lucked[i].users[j].lottery_id;
+            }
+          }
+          this.re_luck.lottery_id = this.re_luck.lottery_id.slice(1);
+          this.axios //删除中奖名单（多个）
+            .delete("/pc_api/offline_activities/lottery", {
+              data: this.re_luck
+            })
+            .then(data => {
+              this.axios
+                .get("/pc_api/offline_activities/lottery")
+                .then(data => {
+                  return data.data.data;
+                })
+                .then(data => {
+                  this.lottery_num = 0;
+                  this.lucked = data;
+                });
+            });
+        });
+    },
+    del: function(id) {
+      this.re_luck.lottery_id = "";
+      this.re_luck.lottery_id = "" + id;
+      this.axios //删除中奖名单（一个）
+        .delete("/pc_api/offline_activities/lottery", {
+          data: this.re_luck
+        })
+        .then(data => {
+          this.axios
+            .get("/pc_api/offline_activities/lottery")
+            .then(data => {
+              return data.data.data;
+            })
+            .then(data => {
+              this.lottery_num = 0;
+              for (let i = 0; i < data.length; i++) {
+                this.lottery_num = this.lottery_num + data[i].users.length;
+              }
+              this.lucked = data;
+            });
+        });
+    }
   }
 };
 </script>
 
-<style>
+<style >
 #luckdraw {
   display: flex;
   position: absolute;
@@ -195,6 +336,7 @@ export default {
   box-sizing: border-box;
   box-shadow: 0 0 8px hsla(0, 0%, 100%, 0.5);
   padding: 10px;
+  background: rgba(0, 0, 0, 0.5);
 }
 #luckdraw .left {
   width: 600px;
@@ -260,6 +402,7 @@ export default {
   overflow-x: hidden;
   width: 570px;
   margin: 21px 0;
+  background: rgba(0, 0, 0, 0.5);
 }
 #luckdraw .luck_user ul {
   position: relative;
@@ -424,6 +567,9 @@ export default {
   top: -10px;
   display: none;
 }
+#luckdraw .result li:hover a {
+  display: block;
+}
 #luckdraw .result li img {
   display: block;
   width: 75px;
@@ -452,7 +598,7 @@ export default {
   #luckdraw {
     max-width: 960px;
     margin: 0 auto;
-    top: 120px;
+    top: 115px;
     padding: 8px;
   }
   #luckdraw .left {
@@ -512,7 +658,7 @@ export default {
   #luckdraw .left .condition .select > div {
     display: inline-block;
     width: 160px;
-    /* margin-left: 40px; */
+    margin-left: 60px;
   }
   #luckdraw .left .condition select {
     border-radius: 5px;
@@ -524,7 +670,7 @@ export default {
   opacity: 0.6;
 } */
   #luckdraw .left .prize {
-    margin-left: 60px;
+    margin-left: 173px;
   }
   #luckdraw .left .num select {
     width: 80px;
