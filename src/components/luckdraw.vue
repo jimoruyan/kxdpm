@@ -34,8 +34,9 @@
         </div>
       </div>
       <div class="btn-box">
-        <button @click="starMove" v-if="luckState">开始抽奖</button>
-        <button @click="stopLuck" v-if="!luckState">停止抽奖</button>
+        <button @click="starMove" v-if="luckState==1">开始抽奖</button>
+        <button style="background:#eee" v-if="luckState==2">停止抽奖</button>
+        <button @click="stopLuck" v-if="luckState==3">停止抽奖</button>
       </div>
     </div>
     <div class="right">
@@ -43,7 +44,7 @@
         <i class="icon icon-title"></i>中奖名单
         <div class="resultNum">
           获奖人数:
-          <span id="luckNumber">25</span>
+          <span id="luckNumber">{{lottery_num}}</span>
         </div>
         <i class="icon icon-more"></i>
       </div>
@@ -76,36 +77,40 @@ export default {
   name: "luckdraw",
   data() {
     return {
-      luckState: true, //抽奖状态
+      luckState: 1, //抽奖状态1.开始抽奖2.不可选取3.停止抽奖
       beginTimer: null,
-      liWidth: null,
-      liNum: null,
+      liWidth: null,//每个头像的宽度
+      liNum: null,//签到的人数
       options: [
         { value: 1, text: "特等奖" },
         { value: 2, text: "一等奖" },
         { value: 3, text: "二等奖" }
       ],
-      selecteds: "",
+      selecteds: "",//获取下拉框选项
       userList: "",
       signed: [], //签到名单
       lucked: "", //获取中奖名单
       num: "", //中奖索引
       re_luck: {
+        //获取中奖ID然后删除
         lottery_id: ""
       },
       begin_luck: {
+        //传入抽奖的种类
         award_id: "",
         num: "1"
       },
-      id: "",
+      id: "", //中奖人的id
       luck_nums: [
+        //下拉框人数
         { value: 1, text: "1" },
         { value: 2, text: "2" },
         { value: 3, text: "3" },
         { value: 4, text: "4" },
         { value: 5, text: "5" }
       ],
-      luck_num: ""
+      luck_num: "", //获取下拉框的人数
+      lottery_num: 0 //中奖人总数
     };
   },
   created() {
@@ -127,6 +132,10 @@ export default {
         return data.data.data;
       })
       .then(data => {
+        this.lottery_num = 0;
+        for (let i = 0; i < data.length; i++) {
+          this.lottery_num = this.lottery_num + data[i].users.length;
+        }
         this.lucked = data;
       });
   },
@@ -147,7 +156,6 @@ export default {
       if (num == 1) {
         this.move();
       } else {
-        //抽取多人
         this.move();
         this.generatorPromise(num).then(res1 => {
           this.move();
@@ -180,10 +188,9 @@ export default {
         setTimeout(() => {
           this.stopLuck();
           setTimeout(() => {
-              num--;
-          res(num);
+            num--;
+            res(num);
           }, 1000);
-          
         }, 3000);
       });
     },
@@ -194,17 +201,16 @@ export default {
       var speed = 50; //抽奖速度
       this.begin_luck.award_id = this.selecteds;
       clearInterval(this.beginTimer);
-      if (this.selecteds == 1 && this.lucked[0].users.length >= 1) {
-        alert("特等奖名额已满！");
+      if (this.selecteds == 1 && this.lucked[0].users.length == 1) {
+        alert("特等奖数量不足！");
         return;
-      } else if (this.selecteds == 2 && this.lucked[1].users.length >= 5) {
-        alert("一等奖名额已满！");
+      } else if (this.selecteds == 2 && this.lucked[1].users.length == 5) {
+        alert("一等奖数量不足！");
         return;
-      } else if (this.selecteds == 3 && this.lucked[2].users.length >= 10) {
-        alert("二等奖名额已满！");
+      } else if (this.selecteds == 3 && this.lucked[2].users.length ==10) {
+        alert("二等奖数量不足！");
         return;
       } else {
-        
         this.axios //抽奖
           .get(
             "/pc_api/offline_activities/prize_draw?" +
@@ -220,8 +226,10 @@ export default {
           }
           oUl.style.left = oUl.offsetLeft - speed + "px";
         }, 10);
-           this.luckState = false; //抽奖状态
-       
+        this.luckState = 2; //抽奖状态
+        setTimeout(() => {
+          this.luckState = 3;
+        }, 1000);
       }
     },
     stopLuck: function() {
@@ -249,9 +257,14 @@ export default {
           return data.data.data;
         })
         .then(data => {
+          console.log(data);
+          this.lottery_num = 0;
+          for (let i = 0; i < data.length; i++) {
+            this.lottery_num = this.lottery_num + data[i].users.length;
+          }
           this.lucked = data;
         });
-      this.luckState = true;
+      this.luckState = 1;
     },
     again: function() {
       //清除所有中奖名单
@@ -282,6 +295,7 @@ export default {
                   return data.data.data;
                 })
                 .then(data => {
+                  this.lottery_num = 0;
                   this.lucked = data;
                 });
             });
@@ -301,6 +315,10 @@ export default {
               return data.data.data;
             })
             .then(data => {
+              this.lottery_num = 0;
+              for (let i = 0; i < data.length; i++) {
+                this.lottery_num = this.lottery_num + data[i].users.length;
+              }
               this.lucked = data;
             });
         });

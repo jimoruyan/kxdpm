@@ -5,12 +5,12 @@
         <i class="icon icon-title"></i>中奖名单
         <div class="resultNum">
           获奖人数:
-          <span id="luckNumber">25</span>
+          <span id="luckNumber">{{lottery_num}}</span>
         </div>
         <i class="icon icon-more"></i>
       </div>
       <div id="luckUl" class="result">
-        <div  class="level" v-for="(list,index) in lucked" :key="index">
+        <div class="level" v-for="(list,index) in lucked" :key="index">
           <label>
             {{list.award_name}}
             <a></a>
@@ -35,40 +35,45 @@ export default {
   name: "luckdraw",
   data() {
     return {
-      lucked:"",  //获取中奖名单    
+      lucked: "", //获取中奖名单
+      lottery_num: 0
     };
   },
   created() {
-      this.axios
+    this.axios
       .get("/pc_api/offline_activities/lottery")
       .then(function(data) {
         return data.data.data;
       })
       .then(data => {
+        this.lottery_num = 0;
+        for (let i = 0; i < data.length; i++) {
+          this.lottery_num = this.lottery_num + data[i].users.length;
+        }
         this.lucked = data;
       });
-  },
+  }
 };
 </script>
 
 <style scoped>
 #luckdraw {
-  position:sticky;
+  position: sticky;
   max-width: 1200px;
   margin: 60px auto;
   box-sizing: border-box;
   box-shadow: 0 0 8px hsla(0, 0%, 100%, 0.5);
   padding: 10px;
-  background: rgba(0,0,0,.5);
+  background: rgba(0, 0, 0, 0.5);
 }
-#luckdraw .rigth{
-      box-sizing: border-box;
-    position: relative;
-    font-size: 24px;
-    color: white;
-    margin: 0 auto;
-    width: 960px;
-    display: inline-block;
+#luckdraw .rigth {
+  box-sizing: border-box;
+  position: relative;
+  font-size: 24px;
+  color: white;
+  margin: 0 auto;
+  width: 960px;
+  display: inline-block;
 }
 #luckdraw .luck_user ul {
   position: relative;
@@ -207,10 +212,10 @@ export default {
 @media screen and (max-width: 1024px) {
   #luckdraw .right .result {
     height: 350px;
-  margin-bottom: 0;
-}
-#luckdraw {
-  margin: 5px auto;
-}
+    margin-bottom: 0;
+  }
+  #luckdraw {
+    margin: 5px auto;
+  }
 }
 </style>
