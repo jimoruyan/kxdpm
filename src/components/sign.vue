@@ -20,6 +20,12 @@
     </div>
     </form>
 </div>
+			<transition name='fade'> 
+        <div id='tip2' v-show='ishow2'>
+        <!-- <div id='text'>签到成功</div> -->
+				<h1 id='text'></h1>
+       	</div>
+      </transition>
     <div class="img">
       <img src='../assets/222.png'>
     </div> 
@@ -42,9 +48,8 @@ export default {
 				phone:'',
 				vcode:''
 			},
-			
 			ishow:false,
-			
+			ishow2:false
 		}
 	},
   methods:{
@@ -53,7 +58,7 @@ export default {
 				this.ishow=true
 				var tip=document.getElementById('error_box')
 				let phonnum=this.phonenum
-				let url='/pc_api/offline_activities/verification_code'
+				let url='http://www.zdsapi.com/pc_api/offline_activities/verification_code'
 				console.log('url',url)
 				this.axios.post(url,qs.stringify(this.phonenum)).then((response)=>{
 					console.log("请求成功",response.data)
@@ -90,17 +95,26 @@ export default {
 					
 			},
 			sign(){ //点击签到按钮
-				this.ishow=true
+				this.ishow2=true
+				setTimeout(()=>{
+            				this.ishow2=!this.ishow2
+        					},2000)   
 				var tip=document.getElementById('error_box')
+				var tip2=document.getElementById('text')
 				let phonenum=this.phonenum
 				let vcode=this.vcode
-				let url='/pc_api/offline_activities/sign_in'
+				let url='http://www.zdsapi.com/pc_api/offline_activities/sign_in'
 				console.log('url',url);
 				this.axios.post(url,qs.stringify(this.phonenum)).then(function(response){
 					console.log("请求成功",response.data)
 						tip.innerHTML=response.data.message 
-						
-					
+						tip2.innerHTML=response.data.message
+							// if(response.data.message ==='手机号码格式错误'){
+							// 		this.ishow2=true
+				 			// 		setTimeout(()=>{
+            	// 			this.ishow2=!this.ishow2
+        			// 		},2000)   
+							// 	}
 				},function(error){
 					console.log("请求失败",error);
 				})
@@ -117,6 +131,32 @@ export default {
 	font-family:"微软雅黑";
 	font-size:12px;
 }
+
+.fade-enter-active,.fade-leave-active{
+    transition: all 0.5s;
+}
+.fade-enter,.fade-leave-to{
+ opacity: 0;
+  
+}
+
+#tip2{
+	position: absolute;
+  height: 120px;
+  z-index: 100;
+	 background-color: white;
+	 border: 1px solid silver;
+	 border-radius: 10px;
+	 right: 80px;
+	 left: 80px;;
+	 top: 200px;
+	 text-align: center;
+}
+#tip2 h1{
+		line-height: 120px;
+		font-size: 18px;
+}
+
 #sign{
 	width: 100%;
 	height: 100%;
@@ -124,10 +164,8 @@ export default {
 	background-size: cover;
 }
 .img{
-  position: absolute;
-  right: 50px;
-  left: 50px;
-  bottom: 100px;
+  position: relative;
+	top: 470px;
 	text-align: center;
 }
 .img img{

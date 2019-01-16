@@ -1,12 +1,12 @@
 <template>
   <div id="sign">
    <ul>
-      <li v-for='(item,index) in imgs' :key='item.index'><img v-bind:src="'http://www.zdsapi.com'+item.img"></li> 
-      <!-- <button id='ceshi' @click='num()' >测试</button> -->
+      <li v-for='(item,index) in imgs' :key='item.index'><img v-bind:src="'http://106.14.94.6:1109/'+item.img"><h5>{{item.name}}</h5></li> 
+      <button id='ceshi' @click='num()' >测试</button>
       <!-- 测试按钮 -->
       <transition name='fade'> 
         <div id='tip' v-show='ishow'>
-        <div id='imgg'><img :src="'http://www.zdsapi.com'+last.img"><h6>{{last.name}}</h6></div>
+        <div id='imgg'><img :src="'http://106.14.94.6:1109/'+last.img"><h6>{{last.name}}</h6></div>
         <div id='text'>签到成功</div>
       </div>
         </transition>
@@ -184,10 +184,24 @@ li{
   margin: 3px;
   background-color:rgba(0, 0, 0, 0.8  );
   display: inline-block;
+  position: relative;
 }
 li img{
   height: 90px;
   width: 60px;
+  
+}
+li h5{
+  font-size: 10px;
+  display: block;
+  font-style: normal;
+  line-height: 20px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.7  );
 }
 
 
@@ -212,11 +226,25 @@ li{
   margin: 2px;
   background-color:rgba(0, 0, 0, 0.8  );
   display: inline-block;
+  position: relative;
 }
 li img{
   height: 61.5px;
   width: 41px;
 }
+li h5{
+  font-size: 5px;
+  display: block;
+  font-style: normal;
+  line-height: 15px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.7  );
+}
+
 #tip{
   position: absolute;
   height: 120px;
