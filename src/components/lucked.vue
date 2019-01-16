@@ -17,8 +17,8 @@
           </label>
           <ul class="luckUl">
             <li v-for="(lists,index) in lucked[index].users" :key="index">
-              <img :src="'http://www.zdsapi.com/'+lists.img">
               <!-- <img :src="'http://www.zdsapi.com/'+lists.img"> -->
+              <img :src="'http://106.14.94.6:1109/'+lists.img">
               <span>{{lists.user_name}}</span>
             </li>
           </ul>

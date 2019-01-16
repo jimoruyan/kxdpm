@@ -10,8 +10,8 @@
         <div class="luck_user">
           <ul ref="oUl" style="width:28500px;">
             <li class="oLi" v-for="(list,index) in signed" :key="index">
-              <img :src="'http://www.zdsapi.com/'+list.img">
               <!-- <img :src="'http://www.zdsapi.com/'+list.img"> -->
+              <img :src="'http://106.14.94.6:1109/'+list.img">
               <span>{{list.name}}</span>
             </li>
           </ul>
@@ -55,7 +55,8 @@
             <li v-for="(lists,index) in lucked[index].users" :key="index">
               <a @click="del(lists.lottery_id)"></a>
               
-              <img :src="'http://www.zdsapi.com/'+lists.img" alt>
+              <!-- <img :src="'http://www.zdsapi.com/'+lists.img" alt> -->
+              <img :src="'http://106.14.94.6:1109/'+lists.img" alt>
               <span>{{lists.user_name}}</span>
             </li>
           </ul>
@@ -79,14 +80,16 @@ export default {
     return {
       luckState: 1, //抽奖状态1.开始抽奖2.不可选取3.停止抽奖
       beginTimer: null,
-      liWidth: null,//每个头像的宽度
-      liNum: null,//签到的人数
+      liWidth: null, //每个头像的宽度
+      liNum: null, //签到的人数
       options: [
         { value: 1, text: "特等奖" },
         { value: 2, text: "一等奖" },
-        { value: 3, text: "二等奖" }
+        { value: 3, text: "二等奖" },
+        { value: 4, text: "三等奖" },
+        { value: 5, text: "纪念奖" }
       ],
-      selecteds: "",//获取下拉框选项
+      selecteds: "", //获取下拉框选项
       userList: "",
       signed: [], //签到名单
       lucked: "", //获取中奖名单
@@ -107,10 +110,13 @@ export default {
         { value: 2, text: "2" },
         { value: 3, text: "3" },
         { value: 4, text: "4" },
-        { value: 5, text: "5" }
+        { value: 5, text: "5" },
+        { value: 6, text: "6" },
+        { value: 10, text: "10" }
       ],
       luck_num: "", //获取下拉框的人数
-      lottery_num: 0 //中奖人总数
+      lottery_num: 0, //中奖人总数
+      award: "" //奖品信息
     };
   },
   created() {
@@ -137,6 +143,13 @@ export default {
           this.lottery_num = this.lottery_num + data[i].users.length;
         }
         this.lucked = data;
+        console.log(this.lucked)
+      });
+    this.axios //获取奖品信息
+      .get("/pc_api/offline_activities/award")
+      .then(data => {
+        this.award = data.data.data;
+        console.log(this.award);
       });
   },
   mounted() {
@@ -156,6 +169,16 @@ export default {
       if (num == 1) {
         this.move();
       } else {
+        if (
+          (this.selecteds == 1 && num + this.lucked[0].users.length > this.award[0].number) ||
+          (this.selecteds == 2 && num + this.lucked[1].users.length > this.award[1].number) ||
+          (this.selecteds == 3 && num + this.lucked[2].users.length > this.award[2].number) ||
+          (this.selecteds == 4 && num + this.lucked[3].users.length > this.award[3].number) ||
+          (this.selecteds == 5 && num + this.lucked[4].users.length > this.award[4].number) 
+        ) {
+          alert("奖品不足！");
+          return;
+        }
         this.move();
         this.generatorPromise(num).then(res1 => {
           this.move();
@@ -175,6 +198,22 @@ export default {
                   this.generatorPromise(res5).then(res6 => {
                     if (res6 == 0) return;
                     this.move();
+                    this.generatorPromise(res6).then(res7 => {
+                      if (res7 == 0) return;
+                      this.move();
+                      this.generatorPromise(res7).then(res8 => {
+                        if (res8 == 0) return;
+                        this.move();
+                        this.generatorPromise(res8).then(res9 => {
+                          if (res9 == 0) return;
+                          this.move();
+                          this.generatorPromise(res9).then(res10 => {
+                            if (res10 == 0) return;
+                            this.move();
+                          });
+                        });
+                      });
+                    });
                   });
                 });
               });
@@ -201,14 +240,20 @@ export default {
       var speed = 50; //抽奖速度
       this.begin_luck.award_id = this.selecteds;
       clearInterval(this.beginTimer);
-      if (this.selecteds == 1 && this.lucked[0].users.length == 1) {
-        alert("特等奖数量不足！");
+      if (this.selecteds == 1 && this.lucked[0].users.length == this.award[0].number) {
+        alert("奖品数量不足！");
         return;
-      } else if (this.selecteds == 2 && this.lucked[1].users.length == 5) {
-        alert("一等奖数量不足！");
+      } else if (this.selecteds == 2 && this.lucked[1].users.length == this.award[1].number) {
+        alert("奖品数量不足！");
         return;
-      } else if (this.selecteds == 3 && this.lucked[2].users.length ==10) {
-        alert("二等奖数量不足！");
+      } else if (this.selecteds == 3 && this.lucked[2].users.length == this.award[2].number) {
+        alert("奖品数量不足！");
+        return;
+      }else if (this.selecteds == 4 && this.lucked[3].users.length == this.award[3].number) {
+        alert("奖品数量不足！");
+        return;
+      }else if (this.selecteds == 5 && this.lucked[4].users.length == this.award[4].number) {
+        alert("奖品数量不足！");
         return;
       } else {
         this.axios //抽奖
