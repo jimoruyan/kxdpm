@@ -4,9 +4,9 @@
       <div><img src="../assets/logo.png" id="name"></div>
       <input type="text" v-model="param.user_name">
       <br>
-      <input type="text" v-model="param.password">
+      <input type="password" v-model="param.password">
       <br>
-      <button @click="login()">登陆</button>
+      <button @click="login()">登录</button>
     </div>
   </div>
 </template>
@@ -20,10 +20,12 @@ export default {
   data() {
     return {
       param: {
-        user_name: "test",
-        password: "17dc93eeb4c83c8eba331bb47ac03920",
-        // password: "888888"
-
+        user_name: "",
+        password: ""
+      },
+      secret:{
+        user_name: "",
+        password: ""
       },
       userToken: ""
     };
@@ -35,29 +37,27 @@ export default {
     ...mapMutations(["changeLogin"]),
     login() {
       let _this = this;
+      this.secret.user_name = this.param.user_name;
+      this.secret.password = this.$md5(this.param.password+this.param.user_name);
       if (this.param.user_name === "" || this.param.password === "") {
         alert("账号或密码不能为空");
       } else {
         this.axios
-          .post("/pc_api/offline_activities/login", qs.stringify(this.param))
+          .post("/pc_api/offline_activities/login", qs.stringify(this.secret))
           .then(res => {
             if ((res.data.status == -1)) {
-              console.log(res)
               alert("账号或密码错误");
               _this.$router.push("/login");
             } else {
-              console.log(res.data);
               _this.userToken = res.data.data.token;
               // 将用户token保存到vuex中
               _this.changeLogin({ Authorization: _this.userToken });
               _this.$router.push("/home");
               alert("登陆成功");
-              console.log(this.$store.state.Authorization);
             }
           })
           .catch(error => {
             alert("账号或密码错误");
-            console.log(error);
           });
       }
     }

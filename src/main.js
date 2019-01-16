@@ -8,6 +8,7 @@ import axios from 'axios'
 import { store } from './store/index';
 import vuex from "vuex"
 import baseURL from './axios-auth.js'
+import md5 from "js-md5"
 
 Vue.use(VueRouter)
 Vue.use(vuex)
@@ -27,6 +28,7 @@ axios.interceptors.request.use(
   });
 
 Vue.prototype.axios = axios
+Vue.prototype.$md5 = md5;
 
 Vue.config.productionTip = false
 

@@ -143,13 +143,11 @@ export default {
           this.lottery_num = this.lottery_num + data[i].users.length;
         }
         this.lucked = data;
-        console.log(this.lucked)
       });
     this.axios //获取奖品信息
       .get("/pc_api/offline_activities/award")
       .then(data => {
         this.award = data.data.data;
-        console.log(this.award);
       });
   },
   mounted() {
@@ -302,7 +300,6 @@ export default {
           return data.data.data;
         })
         .then(data => {
-          console.log(data);
           this.lottery_num = 0;
           for (let i = 0; i < data.length; i++) {
             this.lottery_num = this.lottery_num + data[i].users.length;
