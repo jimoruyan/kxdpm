@@ -1,7 +1,10 @@
 <template>
   <div id="sign">
    <ul>
-      <li v-for='(item,index) in imgs' :key='item.index'><img v-bind:src="'http://106.14.94.6:1109/'+item.img"><h5>{{item.name}}</h5></li> 
+      <li v-for='(item,index) in imgs' :key='item.index'><img v-bind:src="'http://106.14.94.6:1109/'+item.img">
+      <!-- <h5>{{item.name}}</h5> -->
+      <!-- 取消了签到墙每个人照片上的姓名 -->
+      </li> 
       <!-- <button id='ceshi' @click='num()' >测试</button> -->
       <!-- 测试按钮 -->
       <transition name='fade'> 
