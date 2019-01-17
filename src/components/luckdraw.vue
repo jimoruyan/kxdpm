@@ -54,7 +54,7 @@
           <ul class="luckUl">
             <li v-for="(lists,index) in lucked[index].users" :key="index">
               <a @click="del(lists.lottery_id)"></a>
-              
+
               <!-- <img :src="'http://www.zdsapi.com/'+lists.img" alt> -->
               <img :src="'http://106.14.94.6:1109/'+lists.img" alt>
               <span>{{lists.user_name}}</span>
@@ -116,13 +116,13 @@ export default {
       ],
       luck_num: "", //获取下拉框的人数
       lottery_num: 0, //中奖人总数
-      award: "" //奖品信息
+      award: "", //奖品信息
+      // _num: null //计数器
     };
   },
   created() {
     this.selecteds = this.options[0].value;
     this.luck_num = this.luck_nums[0].value;
-
     this.axios //获取签单名单
       .get("/pc_api/offline_activities/sign_in")
       .then(data => {
@@ -164,21 +164,27 @@ export default {
   methods: {
     starMove: function() {
       var num = this.luck_num;
+      // this._num = this.luck_num;
       if (num == 1) {
         this.move();
       } else {
         if (
-          (this.selecteds == 1 && num + this.lucked[0].users.length > this.award[0].number) ||
-          (this.selecteds == 2 && num + this.lucked[1].users.length > this.award[1].number) ||
-          (this.selecteds == 3 && num + this.lucked[2].users.length > this.award[2].number) ||
-          (this.selecteds == 4 && num + this.lucked[3].users.length > this.award[3].number) ||
-          (this.selecteds == 5 && num + this.lucked[4].users.length > this.award[4].number) 
+          (this.selecteds == 1 &&
+            num + this.lucked[0].users.length > this.award[0].number) ||
+          (this.selecteds == 2 &&
+            num + this.lucked[1].users.length > this.award[1].number) ||
+          (this.selecteds == 3 &&
+            num + this.lucked[2].users.length > this.award[2].number) ||
+          (this.selecteds == 4 &&
+            num + this.lucked[3].users.length > this.award[3].number) ||
+          (this.selecteds == 5 &&
+            num + this.lucked[4].users.length > this.award[4].number)
         ) {
           alert("奖品不足！");
           return;
-        }
-        this.move();
-        this.generatorPromise(num).then(res1 => {
+        } else {
+          this.move();
+          this.generatorPromise(num).then(res1 => {
           this.move();
           if (res1 == 0) return;
           this.generatorPromise(res1).then(res2 => {
@@ -218,6 +224,7 @@ export default {
             });
           });
         });
+        }
       }
     },
     generatorPromise: function(num) {
@@ -227,8 +234,8 @@ export default {
           setTimeout(() => {
             num--;
             res(num);
-          }, 1000);
-        }, 3000);
+          }, 200);
+        }, 2000);
       });
     },
     move: function() {
@@ -238,22 +245,24 @@ export default {
       var speed = 50; //抽奖速度
       this.begin_luck.award_id = this.selecteds;
       clearInterval(this.beginTimer);
-      if (this.selecteds == 1 && this.lucked[0].users.length == this.award[0].number) {
+      if (
+        (this.selecteds == 1 &&
+          this.lucked[0].users.length == this.award[0].number) ||
+        (this.selecteds == 2 &&
+          this.lucked[1].users.length == this.award[1].number) ||
+        (this.selecteds == 3 &&
+          this.lucked[2].users.length == this.award[2].number) ||
+        (this.selecteds == 4 &&
+          this.lucked[3].users.length == this.award[3].number) ||
+        (this.selecteds == 5 &&
+          this.lucked[4].users.length == this.award[4].number)
+      ) {
         alert("奖品数量不足！");
         return;
-      } else if (this.selecteds == 2 && this.lucked[1].users.length == this.award[1].number) {
-        alert("奖品数量不足！");
-        return;
-      } else if (this.selecteds == 3 && this.lucked[2].users.length == this.award[2].number) {
-        alert("奖品数量不足！");
-        return;
-      }else if (this.selecteds == 4 && this.lucked[3].users.length == this.award[3].number) {
-        alert("奖品数量不足！");
-        return;
-      }else if (this.selecteds == 5 && this.lucked[4].users.length == this.award[4].number) {
-        alert("奖品数量不足！");
-        return;
-      } else {
+      }else if(this.liNum==this.lottery_num){
+          alert("抽奖人数不足！")
+        } else {
+          console.log(this.liNum,this.lottery_num)
         this.axios //抽奖
           .get(
             "/pc_api/offline_activities/prize_draw?" +
@@ -268,7 +277,7 @@ export default {
             oUl.style.left = liWidth + "px";
           }
           oUl.style.left = oUl.offsetLeft - speed + "px";
-        }, 10);
+        }, 30);
         this.luckState = 2; //抽奖状态
         setTimeout(() => {
           this.luckState = 3;
@@ -280,9 +289,7 @@ export default {
       let liWidth = this.liWidth; //抽奖池图片的宽度
       let selected = this.selecteds; //获取下拉框节点
       let liNum = this.liNum;
-
       clearInterval(this.beginTimer);
-
       for (let i = 0; i < this.signed.length; i++) {
         this.signed[i].index = i;
         if (this.signed[i].id == this.id) {
@@ -307,6 +314,14 @@ export default {
           this.lucked = data;
         });
       this.luckState = 1;
+      // this._num--;
+      // setTimeout(() => {
+      //   if (this._num == 0) {
+      //     return;
+      //   } else {
+      //     this.move();
+      //   }
+      // }, 1000);
     },
     again: function() {
       //清除所有中奖名单

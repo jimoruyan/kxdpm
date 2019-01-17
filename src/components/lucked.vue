@@ -1,5 +1,5 @@
 <template>
-  <div id="luckdraw">
+  <div id="lucked">
     <div class="right">
       <div class="title">
         <i class="icon icon-title"></i>中奖名单
@@ -32,7 +32,7 @@
 import axios from "../axios-auth";
 import qs from "qs";
 export default {
-  name: "luckdraw",
+  name: "lucked",
   data() {
     return {
       lucked: "", //获取中奖名单
@@ -57,8 +57,8 @@ export default {
 </script>
 
 <style scoped>
-#luckdraw {
-  position: sticky;
+#lucked {
+  /* position: sticky; */
   max-width: 1200px;
   margin: 60px auto;
   box-sizing: border-box;
@@ -66,43 +66,16 @@ export default {
   padding: 10px;
   background: rgba(0, 0, 0, 0.5);
 }
-#luckdraw .rigth {
+#lucked .right {
   box-sizing: border-box;
   position: relative;
   font-size: 24px;
   color: white;
   margin: 0 auto;
   width: 960px;
-  display: inline-block;
 }
-#luckdraw .luck_user ul {
-  position: relative;
-}
-#luckdraw .luck_user li {
-  float: left;
-  width: 190px;
-  height: 260px;
-  overflow: hidden;
-  text-align: center;
-  font-size: 24px;
-}
-#luckdraw .luck_user li img {
-  width: 190px;
-  height: 190px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  margin-bottom: 20px;
-  border-radius: 100%;
-}
-#luckdraw .right {
-  box-sizing: border-box;
-  position: relative;
-  font-size: 24px;
-  color: white;
-  margin: 0 auto;
-  width: 960px;
-  display: inline-block;
-}
-#luckdraw .right .title {
+
+#lucked .right .title {
   height: 58px;
   font-size: 22px;
   line-height: 58px;
@@ -110,7 +83,7 @@ export default {
   background-size: 100%;
   background: url(../assets/title-bg.png) no-repeat;
 }
-#luckdraw .right .title .icon-title {
+#lucked .right .title .icon-title {
   margin-left: 80px;
   background: url(../assets/sprite.png) -36px 0 no-repeat;
   width: 28px;
@@ -120,12 +93,12 @@ export default {
   display: inline-block;
   vertical-align: middle;
 }
-#luckdraw .right .title .resultNum {
+#lucked .right .title .resultNum {
   position: absolute;
   display: inline-block;
   margin-left: 175px;
 }
-#luckdraw .right .title .icon-more {
+#lucked .right .title .icon-more {
   width: 28px;
   height: 28px;
   background: url(../assets/sprite.png) -4pc 0 no-repeat;
@@ -135,31 +108,31 @@ export default {
   top: 22px;
   cursor: pointer;
 }
-#luckdraw .right .result {
+#lucked .right .result {
   height: 500px;
   overflow: auto;
 }
-#luckdraw .right .level {
+#lucked .right .level {
   position: relative;
 }
-#luckdraw .right .level:before,
-#luckdraw .right .level:after {
+#lucked .right .level:before,
+#lucked .right .level:after {
   content: "";
   display: block;
   height: 100px;
   background-size: 100% 100%;
   /* background-image: url(../assets/border-t2.png) center no-repeat; */
 }
-#luckdraw .right .level:before {
+#lucked .right .level:before {
   height: 88px;
   background-image: url(../assets/border-t2.png);
 }
 
-#luckdraw .right .level:after {
+#lucked .right .level:after {
   height: 56px;
   background-image: url(../assets/border-b2.png);
 }
-#luckdraw .result label {
+#lucked .result label {
   position: absolute;
   top: 17px;
   left: 0;
@@ -170,27 +143,29 @@ export default {
   text-shadow: 0 3px 5px #df8bff;
 }
 
-#luckdraw .result ul {
+#lucked .result ul {
   font-size: 16px;
+  text-align: center;
   margin: -10px 10px -50px 10px;
 }
-#luckdraw .result ul:after {
+#lucked .result ul:after {
   content: "";
   display: block;
   clear: both;
   width: 100%;
   height: 0;
 }
-#luckdraw .result li {
+#lucked .result li {
+  display: inline-block;
   width: 100px;
-  float: left;
+  /* float: left; */
   text-align: center;
   margin-bottom: 10px;
   margin-left: 8px;
   position: relative;
   height: 120px;
 }
-#luckdraw .result li a {
+#lucked .result li a {
   position: absolute;
   background: url(../assets/delete.png);
   width: 25px;
@@ -199,7 +174,7 @@ export default {
   top: -10px;
   display: none;
 }
-#luckdraw .result li img {
+#lucked .result li img {
   display: block;
   width: 75px;
   height: 75px;
@@ -210,11 +185,11 @@ export default {
   margin-bottom: 10px;
 }
 @media screen and (max-width: 1024px) {
-  #luckdraw .right .result {
+  #lucked .right .result {
     height: 350px;
     margin-bottom: 0;
   }
-  #luckdraw {
+  #lucked {
     margin: 5px auto;
   }
 }
