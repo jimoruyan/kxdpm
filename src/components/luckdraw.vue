@@ -116,7 +116,7 @@ export default {
       ],
       luck_num: "", //获取下拉框的人数
       lottery_num: 0, //中奖人总数
-      award: "", //奖品信息
+      award: "" //奖品信息
       // _num: null //计数器
     };
   },
@@ -185,35 +185,47 @@ export default {
         } else {
           this.move();
           this.generatorPromise(num).then(res1 => {
-          this.move();
-          if (res1 == 0) return;
-          this.generatorPromise(res1).then(res2 => {
-            if (res2 == 0) return;
-            this.move();
-            this.generatorPromise(res2).then(res3 => {
-              if (res3 == 0) return;
-              this.move();
-              this.generatorPromise(res3).then(res4 => {
-                if (res4 == 0) return;
-                this.move();
-                this.generatorPromise(res4).then(res5 => {
-                  if (res5 == 0) return;
-                  this.move();
-                  this.generatorPromise(res5).then(res6 => {
-                    if (res6 == 0) return;
-                    this.move();
-                    this.generatorPromise(res6).then(res7 => {
-                      if (res7 == 0) return;
-                      this.move();
-                      this.generatorPromise(res7).then(res8 => {
-                        if (res8 == 0) return;
-                        this.move();
-                        this.generatorPromise(res8).then(res9 => {
-                          if (res9 == 0) return;
-                          this.move();
-                          this.generatorPromise(res9).then(res10 => {
-                            if (res10 == 0) return;
-                            this.move();
+            // this.move();
+            this.post_luck();
+            if (res1 == 0) return;
+            this.generatorPromise(res1).then(res2 => {
+              if (res2 == 0) return;
+              // this.move();
+              this.post_luck();
+              this.generatorPromise(res2).then(res3 => {
+                if (res3 == 0) return;
+                // this.move();
+                this.post_luck();
+                this.generatorPromise(res3).then(res4 => {
+                  if (res4 == 0) return;
+                  // this.move();
+                  this.post_luck();
+                  this.generatorPromise(res4).then(res5 => {
+                    if (res5 == 0) return;
+                    // this.move();
+                    this.post_luck();
+                    this.generatorPromise(res5).then(res6 => {
+                      if (res6 == 0) return;
+                      // this.move();
+                      this.post_luck();
+
+                      this.generatorPromise(res6).then(res7 => {
+                        if (res7 == 0) return;
+                        // this.move();
+                        this.post_luck();
+                        this.generatorPromise(res7).then(res8 => {
+                          if (res8 == 0) return;
+                          // this.move();
+                          this.post_luck();
+                          this.generatorPromise(res8).then(res9 => {
+                            if (res9 == 0) return;
+                            // this.move();
+                            this.post_luck();
+                            this.generatorPromise(res9).then(res10 => {
+                              if (res10 == 0) return;
+                              // this.move();
+                              this.post_luck();
+                            });
                           });
                         });
                       });
@@ -223,7 +235,6 @@ export default {
               });
             });
           });
-        });
         }
       }
     },
@@ -237,6 +248,18 @@ export default {
           }, 200);
         }, 2000);
       });
+    },
+    post_luck: function() {
+      this.begin_luck.award_id = this.selecteds;
+      this.axios //抽奖
+        .get(
+          "/pc_api/offline_activities/prize_draw?" +
+            qs.stringify(this.begin_luck)
+        )
+        .then(data => {
+          let lucks = data.data.data;
+          this.id = lucks[0].id;
+        });
     },
     move: function() {
       var oUl = this.$refs.oUl; //获取抽奖区节点
@@ -259,10 +282,10 @@ export default {
       ) {
         alert("奖品数量不足！");
         return;
-      }else if(this.liNum==this.lottery_num){
-          alert("抽奖人数不足！")
-        } else {
-          console.log(this.liNum,this.lottery_num)
+      } else if (this.liNum == this.lottery_num) {
+        alert("抽奖人数不足！");
+      } else {
+        // console.log(this.liNum, this.lottery_num);
         this.axios //抽奖
           .get(
             "/pc_api/offline_activities/prize_draw?" +
