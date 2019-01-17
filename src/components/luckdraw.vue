@@ -246,7 +246,7 @@ export default {
             num--;
             res(num);
           }, 200);
-        }, 2000);
+        }, 500);
       });
     },
     post_luck: function() {
@@ -282,7 +282,7 @@ export default {
       ) {
         alert("奖品数量不足！");
         return;
-      } else if (this.liNum == this.lottery_num) {
+      } else if (this.liNum-7 == this.lottery_num) {
         alert("抽奖人数不足！");
       } else {
         // console.log(this.liNum, this.lottery_num);
