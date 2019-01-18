@@ -4,9 +4,9 @@
 	<h2>签到</h2>
     
 		<form method='post' action=''>
-    <div class="input_box">
+    <!-- <div class="input_box">
     	<input type="text" placeholder="请输入姓名" id="uname" lay-verify="required" autocomplete="off"/>
-    </div>
+    </div> -->
     <div class="input_box">
     	<input type="text" v-model='phonenum.phone' placeholder="请输入手机号" id="upass" maxlength="11"lay-verify="required"autocomplete="off" onkeyup="this.value=this.value.replace(/\D/g,'')"/>
     </div>
