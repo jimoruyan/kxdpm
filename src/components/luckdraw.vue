@@ -6,7 +6,7 @@
         滚动抽奖
       </div>
       <div class="userList">
-        <div class="luck"></div>
+        <div class="luck" ref="luck_ul" style="display:none"></div>
         <div class="luck_user">
           <ul ref="oUl" style="width:28500px;">
             <li class="oLi" v-for="(list,index) in signed" :key="index">
@@ -140,7 +140,6 @@ export default {
           }
         }
         this.liNum = this.signed.length;
-        console.log(this.liNum)
       });
     this.axios //获取中奖名单
       .get("/pc_api/offline_activities/lottery")
@@ -234,6 +233,7 @@ export default {
       var liWidth = this.liWidth; //抽奖池图片的宽度
       var liNum = this.liNum; //抽奖池人数
       var speed = 50; //抽奖速度
+      this.$refs.luck_ul.style['display'] = "block"
       this.begin_luck.award_id = this.selecteds;
       clearInterval(this.beginTimer);
       if (
@@ -253,7 +253,6 @@ export default {
       } else if (this.liNum == this.lottery_num) {
         alert("抽奖人数不足！");
       } else {
-        // console.log(this.liNum, this.lottery_num);
         this.axios //获取签单名单
       .get("/pc_api/offline_activities/sign_in")
       .then(data => {
