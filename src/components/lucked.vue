@@ -42,8 +42,12 @@ export default {
   created() {
     this.axios
       .get("/pc_api/offline_activities/lottery")
-      .then(function(data) {
-        return data.data.data;
+      .then(data => {
+        if (data.data.status == 1002) {
+          this.$router.push("/login");
+        } else {
+          return data.data.data;
+        }
       })
       .then(data => {
         this.lottery_num = 0;

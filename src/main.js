@@ -26,7 +26,6 @@ axios.interceptors.request.use(
   error => {
     return Promise.reject(error);
   });
-
 Vue.prototype.axios = axios
 Vue.prototype.$md5 = md5;
 

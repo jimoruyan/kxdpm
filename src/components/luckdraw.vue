@@ -126,7 +126,11 @@ export default {
     this.axios //获取签单名单
       .get("/pc_api/offline_activities/sign_in")
       .then(data => {
-        return data.data.data;
+        if (data.data.status == 1002) {
+          this.$router.replace("/login");
+        } else {
+          return data.data.data;
+        }
       })
       .then(data => {
         this.signed = data.users;
@@ -242,11 +246,11 @@ export default {
       return new Promise((res, rej) => {
         setTimeout(() => {
           this.stopLuck();
-          setTimeout(() => {
+          // setTimeout(() => {
             num--;
             res(num);
-          }, 200);
-        }, 500);
+          // }, 200);
+        }, 700);
       });
     },
     post_luck: function() {
@@ -257,8 +261,14 @@ export default {
             qs.stringify(this.begin_luck)
         )
         .then(data => {
+           if (data.data.status == -1) {
+              alert("抽奖人数不足！");
+              return;
+            }else{
           let lucks = data.data.data;
           this.id = lucks[0].id;
+            }
+          
         });
     },
     move: function() {
@@ -282,7 +292,7 @@ export default {
       ) {
         alert("奖品数量不足！");
         return;
-      } else if (this.liNum-7 == this.lottery_num) {
+      } else if (this.liNum == this.lottery_num) {
         alert("抽奖人数不足！");
       } else {
         // console.log(this.liNum, this.lottery_num);
@@ -292,21 +302,27 @@ export default {
               qs.stringify(this.begin_luck)
           )
           .then(data => {
-            let lucks = data.data.data;
-            this.id = lucks[0].id;
+            if (data.data.status == -1) {
+              alert("抽奖人数不足！");
+              return;
+            } else {
+              let lucks = data.data.data;
+              this.id = lucks[0].id;
+              this.beginTimer = setInterval(function() {
+                if (oUl.offsetLeft <= -liWidth * (liNum - 1)) {
+                  oUl.style.left = liWidth + "px";
+                }
+                oUl.style.left = oUl.offsetLeft - speed + "px";
+              }, 30);
+              this.luckState = 2; //抽奖状态
+              setTimeout(() => {
+                this.luckState = 3;
+              }, 1000);
+            }
           });
-        this.beginTimer = setInterval(function() {
-          if (oUl.offsetLeft <= -liWidth * (liNum - 1)) {
-            oUl.style.left = liWidth + "px";
-          }
-          oUl.style.left = oUl.offsetLeft - speed + "px";
-        }, 30);
-        this.luckState = 2; //抽奖状态
-        setTimeout(() => {
-          this.luckState = 3;
-        }, 1000);
       }
     },
+    //停止抽奖
     stopLuck: function() {
       let oUl = this.$refs.oUl; //获取抽奖区节点
       let liWidth = this.liWidth; //抽奖池图片的宽度
