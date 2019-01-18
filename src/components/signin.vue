@@ -121,16 +121,17 @@ methods:{
 }
 #tip{
   position: absolute;
-  height: 150px;
-  width: 350px;
+  right: 0;
+  left: 0;
   z-index: 10;
   top: 350px;
-  left: 755px;
+  text-align: center;
+  
 }
 #imgg{
+  display: inline-block;
   height: 150px;
   width: 100px;
-  float: left;
   margin-right: 10px;
   border-radius: 10px;
   background-color: white;
@@ -166,6 +167,7 @@ methods:{
   line-height: 150px;
   border-radius: 10px;
   font-family: STHeiti;
+  overflow: hidden;
 }
 #sign {
   max-width: 1200px;
@@ -250,20 +252,21 @@ li h5{
 
 #tip{
   position: absolute;
-  height: 120px;
-  width: 310px;
+ text-align: center;
   z-index: 10;
   top: 250px;
-  left: 360px;
+  left: 0;
+  right: 0;
 }
 #imgg{
+  display: inline-block;
   height: 120px;
   width: 80px;
-  float: left;
   margin-right: 10px;
   border-radius: 10px;
   background-color: white;
   position: relative;
+  overflow: hidden;
 }
 #text{
   display: inline-block;
@@ -275,6 +278,7 @@ li h5{
   line-height: 120px;
   border-radius: 10px;
   font-family: STHeiti;
+  overflow: hidden;
 }
 #imgg h6{
   font-size: 15px;
