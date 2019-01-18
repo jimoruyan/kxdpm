@@ -76,7 +76,7 @@ export default {
   font-size: 24px;
   color: white;
   margin: 0 auto;
-  width: 960px;
+  width: 940px;
 }
 
 #lucked .right .title {
@@ -190,7 +190,7 @@ export default {
 }
 @media screen and (max-width: 1024px) {
   #lucked .right .result {
-    height: 350px;
+    height: 300px;
     margin-bottom: 0;
   }
   #lucked {
