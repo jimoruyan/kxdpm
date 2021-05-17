@@ -78,7 +78,7 @@ methods:{
       var newitem=[{name:'1',img:require('../assets/me.jpg')},{name:'2',img:require('../assets/me.jpg')}];
       this.list=this.list.concat(newitem)
      
-        
+         
     },
 },
  watch:{
